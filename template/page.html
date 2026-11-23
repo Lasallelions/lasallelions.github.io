@@ -1,0 +1,805 @@
+<meta name="dash-one-writer">
+<style>
+#dash-root { --dash-gutter: 0; }
+.ll { --ll-red: #c8102e; --ll-cream: #fcf8ee; --ll-surface: #ffffff; --ll-line: #e7dcc4; --color-bg: #fcf8ee; --color-panel: #ffffff; --color-fg: #111111; --color-fg-muted: #3d3d3d; --color-border-line: #e2d7bf; --color-ok: #1b7a36; --color-bad: #b3261e; --color-warn: #9a6700; --cds-text-secondary: #3d3d3d; --cds-chart-grid: #ece3cf; --cds-chart-axis: #9b8f78; --cds-chart-muted: #b9ad96; --cds-chart-reference: #6f6552; --cds-surface-popover: #ffffff; --cds-border: #d9cdb2; --cds-shadow-popover: 0 4px 14px rgba(60,40,10,.15); color-scheme: light; color: #111111; background: var(--ll-cream); padding: var(--cds-pad-lg) max(16px, var(--cds-pad-xl)) var(--cds-pad-xl); min-height: 100vh; box-sizing: border-box; display: flex; flex-direction: column; gap: var(--cds-gap-xl); font-family: var(--font-anthropic-sans); color: var(--color-fg); }
+.ll-head { display: flex; flex-direction: column; gap: var(--cds-gap-xs); }
+.ll-eyebrow { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); letter-spacing: .06em; text-transform: uppercase; }
+.ll-title { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); margin: 0; text-wrap: balance; }
+.ll-take { font-size: var(--cds-font-size-body); margin: 0; max-width: 68ch; line-height: 1.5; }
+.ll-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: var(--cds-gap-md); }
+.ll-tile { box-shadow: 0 1px 2px rgba(80,50,10,.08); background: var(--ll-surface); border: 1px solid var(--ll-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); display: flex; flex-direction: column; gap: var(--cds-gap-xs); min-width: 0; }
+.ll-tile-label { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.ll-tile-value { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); font-variant-numeric: tabular-nums; line-height: 1.1; }
+.ll-tile-sub { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); font-variant-numeric: tabular-nums; }
+.ll-sec { display: flex; flex-direction: column; gap: var(--cds-gap-sm); min-width: 0; }
+.ll-sec h2 { font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); margin: 0; }
+.ll-note { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); margin: 0; max-width: 72ch; line-height: 1.5; }
+.ll-grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--cds-gap-xl); }
+.ll-chart { position: relative; min-height: 240px; width: 100%; }
+.ll-chart svg text { fill: var(--cds-text-secondary); font-size: var(--cds-font-size-caption); font-family: var(--font-anthropic-sans); }
+.ll-chart .ll-val { fill: var(--color-fg); font-variant-numeric: tabular-nums; }
+.ll-chart .ll-wl-w { fill: var(--color-ok); font-weight: 600; }
+.ll-chart .ll-wl-l { fill: var(--color-bad); font-weight: 600; }
+.ll-legend { display: flex; flex-wrap: wrap; gap: var(--cds-gap-md); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.ll-key { display: inline-flex; align-items: center; gap: 6px; }
+.ll-sw { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+.ll-sw-a { background: var(--ll-red); }
+.ll-sw-b { background: var(--cds-chart-muted); }
+.ll-tip { position: absolute; pointer-events: none; background: var(--cds-surface-popover); border: 1px solid var(--cds-border); box-shadow: var(--cds-shadow-popover); border-radius: var(--cds-radius); padding: var(--cds-pad-sm) var(--cds-pad-md); font-size: var(--cds-font-size-caption); color: var(--color-fg); white-space: nowrap; z-index: 2; }
+.ll-tip b { font-weight: var(--cds-font-weight-medium); }
+.ll-tip span { color: var(--cds-text-secondary); }
+.ll-scroll { overflow-x: auto; }
+.ll-table { border-collapse: collapse; width: 100%; font-size: var(--cds-font-size-body); font-variant-numeric: tabular-nums; }
+.ll-table th { text-align: right; font-weight: var(--cds-font-weight-medium); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); padding: var(--cds-pad-xs) var(--cds-pad-sm); border-bottom: 1px solid var(--color-border-line); white-space: nowrap; }
+.ll-table td { text-align: right; padding: var(--cds-pad-xs) var(--cds-pad-sm); border-bottom: 1px solid var(--color-border-line); white-space: nowrap; }
+.ll-table th.l, .ll-table td.l { text-align: left; }
+.ll-table tr.ll-us td { background: color-mix(in srgb, var(--ll-red) 12%, var(--ll-surface)); font-weight: var(--cds-font-weight-medium); }
+.ll-pill { display: inline-block; min-width: 1.6em; text-align: center; border-radius: 999px; padding: 0 6px; font-size: var(--cds-font-size-caption); font-weight: 600; }
+.ll-pill-w { color: var(--color-ok); border: 1px solid var(--color-ok); }
+.ll-pill-l { color: var(--color-bad); border: 1px solid var(--color-bad); }
+.ll-good { color: var(--color-ok); }
+.ll-bad { color: var(--color-bad); }
+.ll details { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); line-height: 1.55; }
+.ll details summary { cursor: pointer; color: var(--color-fg); font-size: var(--cds-font-size-body); }
+.ll details ul { margin: var(--cds-gap-sm) 0 0; padding-left: 1.2em; display: flex; flex-direction: column; gap: 4px; max-width: 80ch; }
+.ll-nav { display: flex; gap: 2px; overflow-x: auto; border-bottom: 1px solid var(--color-border-line); position: sticky; top: 0; background: var(--ll-cream); z-index: 3; scrollbar-width: none; margin-top: calc(-1 * var(--cds-gap-md)); }
+.ll-tab { appearance: none; background: none; border: 0; border-bottom: 2px solid transparent; margin-bottom: -1px; padding: var(--cds-pad-sm) var(--cds-pad-md); font: inherit; font-size: var(--cds-font-size-body); color: var(--color-fg-muted); cursor: pointer; white-space: nowrap; }
+.ll-tab:hover { color: var(--color-fg); }
+.ll-tab[aria-current=page] { color: var(--color-fg); border-bottom-color: var(--color-fg); font-weight: var(--cds-font-weight-medium); }
+.ll-tab:focus-visible, .ll-link:focus-visible { outline: 2px solid var(--color-fg); outline-offset: 2px; }
+.ll-page { display: flex; flex-direction: column; gap: var(--cds-gap-xl); min-width: 0; }
+.ll-row { display: flex; justify-content: space-between; align-items: center; gap: var(--cds-gap-md); flex-wrap: wrap; }
+.ll-link { appearance: none; background: none; border: 0; padding: 0; font: inherit; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); text-decoration: underline; cursor: pointer; }
+.ll-sort { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); display: inline-flex; align-items: center; gap: var(--cds-gap-sm); }
+.ll-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--cds-gap-md); min-height: 120px; }
+.ll-card { box-shadow: 0 1px 2px rgba(80,50,10,.08); background: var(--ll-surface); border: 1px solid var(--ll-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); display: flex; flex-direction: column; gap: var(--cds-gap-sm); min-width: 0; }
+.ll-card-top { display: flex; align-items: baseline; gap: var(--cds-gap-sm); min-width: 0; }
+.ll-card-num { font-family: var(--font-anthropic-serif); font-size: var(--cds-font-size-title); line-height: 1; min-width: 1.5em; font-variant-numeric: tabular-nums; }
+.ll-card-name { font-weight: var(--cds-font-weight-medium); font-size: var(--cds-font-size-body); min-width: 0; }
+.ll-card-pos { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.ll-card-stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; text-align: center; }
+.ll-stat-v { font-size: var(--cds-font-size-heading); font-variant-numeric: tabular-nums; }
+.ll-stat-k { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); letter-spacing: .05em; }
+.ll-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(36px, 1fr)); gap: 3px; }
+.ll-cell { border-radius: 4px; padding: 3px 0; text-align: center; border: 1px solid var(--color-border-line); display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.ll-cell-d { font-size: 10px; color: var(--color-fg-muted); white-space: nowrap; }
+.ll-cell-v { font-size: var(--cds-font-size-body); font-variant-numeric: tabular-nums; font-weight: var(--cds-font-weight-medium); }
+.ll-cell-x { font-size: 10px; color: var(--color-fg-muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ll-cell-dnp { opacity: .5; border-style: dashed; }
+.ll-top { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; }
+.ll-top li { display: flex; gap: var(--cds-gap-md); padding: var(--cds-pad-xs) 0; border-bottom: 1px solid var(--color-border-line); font-variant-numeric: tabular-nums; align-items: baseline; }
+.ll-top .n { color: var(--color-fg-muted); width: 2em; }
+.ll-top .nm { flex: 1; min-width: 0; }
+.ll-top .v { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
+.ll-top .p { font-weight: var(--cds-font-weight-medium); min-width: 3.5em; text-align: right; }
+.ll-staff { margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: var(--cds-gap-md); }
+.ll-staff li { background: var(--ll-surface); border: 1px solid var(--ll-line); border-radius: var(--cds-radius); padding: var(--cds-pad-sm) var(--cds-pad-md); }
+.ll-staff span { display: block; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.ll-table td.z { color: var(--color-fg-muted); }
+.ll-table th.c, .ll-table td.c { text-align: center; }
+[data-dash-source-state=refreshing] { opacity: .5; }
+.ll-ctrls { display: flex; flex-wrap: wrap; gap: var(--cds-gap-md); align-items: center; }
+.ll-chart .ll-dot { stroke: var(--color-bg); stroke-width: 1.5; }
+.ll-chart .ll-avg { stroke: var(--cds-chart-reference); stroke-dasharray: 3 3; }
+.ll-chart .ll-lab-us { fill: var(--color-fg); font-weight: 600; }
+.ll-sus td.l { white-space: normal; }
+.ll .dash-select { background-color: #ffffff; color: #111111; border-color: #d9cdb2; }
+.ll a { color: #111111; }
+</style>
+
+<div class="ll">
+  <header class="ll-head" id="top">
+    <div class="ll-eyebrow">Ligue de hockey du Grand Montréal · Junior C mixte · Season 2026-27</div>
+    <h1 class="ll-title">Lions LaSalle</h1>
+    <p class="ll-take">After <b data-draw="t-gp" data-source="team" data-field="gp" data-row="0">—</b> games the Lions are <b><span data-draw="t-w" data-source="team" data-field="w" data-row="0">—</span>–<span data-draw="t-l" data-source="team" data-field="l" data-row="0">—</span></b>, <b data-draw="t-rank" data-source="standings" data-field="rank" data-where="team=LIONS%20LASALLE">—</b> of 19 in the standings, and have been outscored <b data-draw="t-gf" data-source="team" data-field="gf" data-row="0">—</b>–<b data-draw="t-ga" data-source="team" data-field="ga" data-row="0">—</b>. Next game: <b data-draw="t-next" data-source="schedule">—</b>.</p>
+  </header>
+
+  <nav class="ll-nav" aria-label="Team site">
+    <button type="button" class="ll-tab" data-tab="home">Home</button>
+    <button type="button" class="ll-tab" data-tab="roster">Roster</button>
+    <button type="button" class="ll-tab" data-tab="stats">Stats</button>
+    <button type="button" class="ll-tab" data-tab="games">Results</button>
+    <button type="button" class="ll-tab" data-tab="schedule">Schedule</button>
+    <button type="button" class="ll-tab" data-tab="standings">Standings</button>
+    <button type="button" class="ll-tab" data-tab="league">League</button>
+  </nav>
+
+  <section class="ll-page" id="home">
+  <section class="ll-tiles" id="kpis" aria-label="Team summary">
+    <div class="ll-tile" id="kpi-record">
+      <div class="ll-tile-label">Record (W–L)</div>
+      <div class="ll-tile-value"><span data-draw="k-w" data-source="team" data-field="w" data-row="0">—</span>–<span data-draw="k-l" data-source="team" data-field="l" data-row="0">—</span></div>
+      <div class="ll-tile-sub">Home <span data-draw="k-hw" data-source="team" data-field="home_w" data-row="0">—</span>–<span data-draw="k-hl" data-source="team" data-field="home_l" data-row="0">—</span> · Away <span data-draw="k-aw" data-source="team" data-field="away_w" data-row="0">—</span>–<span data-draw="k-al" data-source="team" data-field="away_l" data-row="0">—</span></div>
+    </div>
+    <div class="ll-tile" id="kpi-gf">
+      <div class="ll-tile-label">Goals for per game</div>
+      <div class="ll-tile-value" data-draw="k-gfpg" data-source="team" data-field="gf_pg" data-row="0">—</div>
+      <div class="ll-tile-sub"><span data-draw="k-gf" data-source="team" data-field="gf" data-row="0">—</span> goals total</div>
+    </div>
+    <div class="ll-tile" id="kpi-ga">
+      <div class="ll-tile-label">Goals against per game</div>
+      <div class="ll-tile-value" data-draw="k-gapg" data-source="team" data-field="ga_pg" data-row="0">—</div>
+      <div class="ll-tile-sub"><span data-draw="k-ga" data-source="team" data-field="ga" data-row="0">—</span> goals total</div>
+    </div>
+    <div class="ll-tile" id="kpi-pp">
+      <div class="ll-tile-label">Power play (est.)</div>
+      <div class="ll-tile-value"><span data-draw="k-pp" data-source="team" data-field="pp_pct" data-row="0">—</span>%</div>
+      <div class="ll-tile-sub"><span data-draw="k-ppg" data-source="team" data-field="pp_goals" data-row="0">—</span> goals on <span data-draw="k-ppo" data-source="team" data-field="pp_opps" data-row="0">—</span> chances</div>
+    </div>
+    <div class="ll-tile" id="kpi-pk">
+      <div class="ll-tile-label">Penalty kill (est.)</div>
+      <div class="ll-tile-value"><span data-draw="k-pk" data-source="team" data-field="pk_pct" data-row="0">—</span>%</div>
+      <div class="ll-tile-sub"><span data-draw="k-pkk" data-source="team" data-field="pk_kills" data-row="0">—</span> kills of <span data-draw="k-pkt" data-source="team" data-field="pk_times" data-row="0">—</span> times shorthanded</div>
+    </div>
+    <div class="ll-tile" id="kpi-pim">
+      <div class="ll-tile-label">Penalty minutes per game</div>
+      <div class="ll-tile-value" data-draw="k-pimpg" data-source="team" data-field="pim_pg" data-row="0">—</div>
+      <div class="ll-tile-sub"><span data-draw="k-pim" data-source="team" data-field="pim" data-row="0">—</span> PIM vs <span data-draw="k-opim" data-source="team" data-field="opp_pim" data-row="0">—</span> for opponents</div>
+    </div>
+  </section>
+
+  <section class="ll-sec" id="games-sec">
+    <h2>Every game so far</h2>
+    <div class="ll-legend"><span class="ll-key"><span class="ll-sw ll-sw-a" data-draw="sw-a"></span>Lions goals</span><span class="ll-key"><span class="ll-sw ll-sw-b"></span>Opponent goals</span></div>
+    <div class="ll-chart" id="games-chart" data-draw="games-chart" data-source="gamelog"></div>
+    <p class="ll-note">Each pair of bars is one game: Lions goals in red, opponent goals in tan, with the result underneath.</p>
+  </section>
+
+  <section class="ll-sec" id="leaders-mini">
+    <div class="ll-row"><h2>Top scorers</h2><button type="button" class="ll-link" data-tab="roster">Full roster and game-by-game stats</button></div>
+    <ol class="ll-top" data-draw="top5" data-source="players"></ol>
+  </section>
+  </section>
+
+  <section class="ll-page" id="roster" hidden>
+    <section class="ll-sec" id="roster-players">
+      <div class="ll-row">
+        <h2>Players</h2>
+        <label class="ll-sort" for="roster-sort">Sort by
+          <select class="dash-select" id="roster-sort">
+            <option value="num">Jersey number</option>
+            <option value="pts">Points</option>
+            <option value="g">Goals</option>
+            <option value="a">Assists</option>
+            <option value="name">Name</option>
+          </select>
+        </label>
+      </div>
+      <p class="ll-note">Each card has the player's season totals, then one box per game: points on top, goals (G) and assists (A) underneath. DNP means the player wasn't on that game's score sheet.</p>
+      <div class="ll-cards" id="player-cards" data-draw="roster-cards" data-source="players pgames"></div>
+    </section>
+
+    <section class="ll-sec" id="roster-goalies">
+      <h2>Goalies</h2>
+      <div class="ll-cards" id="goalie-cards" data-draw="goalie-cards" data-source="goalies pgames"></div>
+    </section>
+
+    <section class="ll-sec" id="roster-grid">
+      <h2>Goals and assists, game by game</h2>
+      <p class="ll-note">Each cell is goals–assists. A dot means the player dressed but didn't get a point; a dash means the player didn't dress.</p>
+      <div class="ll-scroll" id="matrix" data-draw="matrix" data-source="pgames players"></div>
+    </section>
+
+    <section class="ll-sec" id="roster-staff">
+      <h2>Coaching staff</h2>
+      <ul class="ll-staff" data-draw="staff" data-source="roster"></ul>
+    </section>
+  </section>
+
+  <section class="ll-page" id="stats" hidden>
+  <div class="ll-grid2">
+    <section class="ll-sec" id="periods">
+      <h2>Goals by period</h2>
+      <div class="ll-legend"><span class="ll-key"><span class="ll-sw ll-sw-a" data-draw="sw-a"></span>For</span><span class="ll-key"><span class="ll-sw ll-sw-b"></span>Against</span></div>
+      <div class="ll-chart" id="period-chart" data-draw="period-chart" data-source="periods"></div>
+      <p class="ll-note">Goals for and against in each period, all games combined.</p>
+    </section>
+    <section class="ll-sec" id="pen-types">
+      <h2>Lions minor penalties by type</h2>
+      <div class="ll-chart" id="pen-chart" data-draw="pen-chart" data-source="pens"></div>
+      <p class="ll-note">Minor penalties only; majors, match penalties and misconducts aren't included.</p>
+    </section>
+  </div>
+
+  <section class="ll-sec" id="scoring">
+    <h2>Scoring leaders</h2>
+    <div class="ll-scroll">
+      <table class="ll-table" id="players-table" data-source="players" data-row-key="name">
+        <thead><tr><th>#</th><th class="l" data-field="name">Player</th><th data-field="pos">Pos</th><th data-field="gp">GP</th><th data-field="g">G</th><th data-field="a">A</th><th data-field="pts">PTS</th><th data-field="ppgp">P/GP</th><th data-field="ppg">PPG</th><th data-field="shg">SHG</th><th data-field="gwg">GWG</th><th data-field="pim">PIM</th><th data-field="share">% of team goals</th></tr></thead>
+        <tbody data-draw="players"></tbody>
+      </table>
+    </div>
+    <p class="ll-note">P/GP is points per game played. "% of team goals" is the share of the Lions' goals the player scored or assisted on. PPG and SHG are estimated from penalty times on the score sheets.</p>
+  </section>
+
+  <section class="ll-sec" id="goalies-sec">
+    <h2>Goaltending</h2>
+    <div class="ll-scroll">
+      <table class="ll-table" id="goalies-table" data-source="goalies" data-row-key="name">
+        <thead><tr><th>#</th><th class="l" data-field="name">Goalie</th><th data-field="dressed">Dressed</th><th data-field="gp">Decisions</th><th data-field="w">W</th><th data-field="l">L</th><th data-field="ga">GA</th><th data-field="gaa">GA per game</th><th data-field="so">SO</th></tr></thead>
+        <tbody data-draw="goalies"></tbody>
+      </table>
+    </div>
+    <p class="ll-note">Score sheets record no shots, so save percentage isn't available. GA per game assumes the goalie with the decision played the whole game.</p>
+  </section>
+
+  </section>
+
+  <section class="ll-page" id="games" hidden>
+  <section class="ll-sec" id="results">
+    <h2>Results</h2>
+    <div class="ll-scroll">
+      <table class="ll-table" id="log-table" data-source="gamelog" data-row-key="game_no">
+        <thead><tr><th class="l" data-field="date">Date</th><th class="l" data-field="game_no">Game</th><th class="l" data-field="opponent">Opponent</th><th data-field="result">Result</th><th>Score</th><th class="l" data-field="goalie">Goalie</th><th data-field="lions_pim">PIM</th><th class="l" data-field="lions_scorers">Lions scorers</th></tr></thead>
+        <tbody data-draw="log"></tbody>
+      </table>
+    </div>
+  </section>
+
+  </section>
+
+  <section class="ll-page" id="schedule" hidden>
+  <section class="ll-sec" id="upcoming">
+    <h2>Remaining schedule</h2>
+    <div class="ll-scroll">
+      <table class="ll-table" id="sched-table" data-source="schedule" data-row-key="game_no">
+        <thead><tr><th class="l" data-field="date">Date</th><th class="l" data-field="time">Time</th><th class="l" data-field="home_away">Where</th><th class="l" data-field="opponent">Opponent</th><th class="l">Opponent now</th><th class="l" data-field="arena">Arena</th></tr></thead>
+        <tbody data-draw="sched"></tbody>
+      </table>
+    </div>
+    <p class="ll-note">Opponent records are from today's standings (wins–ties–losses).</p>
+  </section>
+
+  </section>
+
+  <section class="ll-page" id="standings" hidden>
+  <section class="ll-sec" id="standings-sec">
+    <h2>Junior C standings</h2>
+    <div class="ll-scroll">
+      <table class="ll-table" id="standings-table" data-source="standings" data-row-key="team">
+        <thead><tr><th data-field="rank">#</th><th class="l" data-field="team">Team</th><th data-field="gp">GP</th><th data-field="w">W</th><th data-field="t">T</th><th data-field="l">L</th><th data-field="fair_play_pts">FP</th><th data-field="pts">PTS</th><th data-field="pts_pct">PTS%</th><th data-field="gf">GF</th><th data-field="ga">GA</th><th data-field="diff">DIFF</th><th data-field="pim">PIM</th></tr></thead>
+        <tbody data-draw="standings"></tbody>
+      </table>
+    </div>
+    <p class="ll-note">FP is the league's fair-play point, earned per game. The table is ordered by points, and teams have played different numbers of games, so points percentage is the fairer comparison.</p>
+  </section>
+
+  </section>
+
+  <section class="ll-page" id="league" hidden>
+  <p class="ll-take" id="league-take"><b data-draw="lg-top-name" data-source="league_players" data-field="name" data-row="0">—</b> of <span data-draw="lg-top-team" data-source="league_players" data-field="team" data-row="0">—</span> leads Junior C with <b data-draw="lg-top-pts" data-source="league_players" data-field="pts" data-row="0">—</b> points. The Lions' top scorer, <b data-draw="lg-us-name" data-source="lions_best" data-field="name" data-row="0">—</b>, has <b data-draw="lg-us-pts" data-source="lions_best" data-field="pts" data-row="0">—</b> which ranks No. <b data-draw="lg-us-rank" data-source="lions_best" data-field="rank" data-row="0">—</b> in the league.</p>
+
+  <div class="ll-grid2">
+    <section class="ll-sec" id="attack-defence">
+      <h2>Attack vs defence, per game</h2>
+      <div class="ll-chart" id="ad-chart" data-draw="ad-chart" data-source="team_rates" style="min-height: 300px"></div>
+      <p class="ll-note">Each dot is a team. Right means more goals scored per game, lower means fewer allowed. Dashed lines are the league averages.</p>
+    </section>
+    <section class="ll-sec" id="pim-teams">
+      <h2>Penalty minutes per game</h2>
+      <div class="ll-chart" id="pim-chart" data-draw="pim-chart" data-source="team_rates" style="min-height: 300px"></div>
+    </section>
+  </div>
+
+  <section class="ll-sec" id="team-rates">
+    <h2>Team rankings and per-game stats</h2>
+    <div class="ll-scroll">
+      <table class="ll-table" id="rates-table" data-source="team_rates" data-row-key="team">
+        <thead><tr><th data-field="rank">#</th><th class="l" data-field="team">Team</th><th data-field="gp">GP</th><th data-field="pts">PTS</th><th data-field="pts_pct">PTS%</th><th data-field="gf_pg">GF/GP</th><th data-field="ga_pg">GA/GP</th><th data-field="diff_pg">DIFF/GP</th><th data-field="pim_pg">PIM/GP</th></tr></thead>
+        <tbody data-draw="rates"></tbody>
+      </table>
+    </div>
+    <p class="ll-note">Ranked by league points, as in the standings. PTS% is points earned out of points available, and the per-game columns put teams that have played more games on equal footing.</p>
+  </section>
+
+  <section class="ll-sec" id="league-leaders">
+    <div class="ll-row">
+      <h2>League scoring leaders</h2>
+      <div class="ll-ctrls">
+        <label class="ll-sort">Team <select class="dash-select" id="lg-team" data-draw="lg-team" aria-label="Team" data-source="league_players"></select></label>
+        <label class="ll-sort">Sort by <select class="dash-select" id="lg-sort" aria-label="Sort by"><option value="pts">Points</option><option value="g">Goals</option><option value="a">Assists</option><option value="ppgp">Points per game</option><option value="pim">Penalty minutes</option></select></label>
+      </div>
+    </div>
+    <div class="ll-scroll">
+      <table class="ll-table" id="lg-table" data-source="league_players" data-row-key="player_id">
+        <thead><tr><th>Rank</th><th>#</th><th class="l" data-field="name">Player</th><th class="l" data-field="team">Team</th><th data-field="gp">GP</th><th data-field="g">G</th><th data-field="a">A</th><th data-field="pts">PTS</th><th data-field="ppgp">P/GP</th><th data-field="pim">PIM</th></tr></thead>
+        <tbody data-draw="lg-players"></tbody>
+      </table>
+    </div>
+    <p class="ll-note">All teams shows the top 25; pick a team to see its whole list. Lions players are shaded. Tallied from {{SHEETS}} of the {{PLAYED}} games played.{{MISSING}} GP counts the games a player is listed in the lineup on the score sheet. P/GP is points per game played; sorting by it lists players with 3 or more games.</p>
+  </section>
+
+  <section class="ll-sec" id="suspensions">
+    <h2>Active suspensions</h2>
+    <div class="ll-scroll">
+      <table class="ll-table ll-sus" id="sus-table" data-source="suspensions" data-row-key="player">
+        <thead><tr><th class="l" data-field="player">Player</th><th class="l" data-field="team">Team</th><th class="l" data-field="code">Code</th><th class="l" data-field="game_no">From game</th><th data-field="served">Served</th><th data-field="games">Games</th></tr></thead>
+        <tbody data-draw="sus"></tbody>
+      </table>
+    </div>
+    <p class="ll-note">As listed on the league's Suspensions page on {{UPDATED}}. Team staff are marked.</p>
+  </section>
+  </section>
+
+  <details id="notes">
+    <summary>How these stats were made</summary>
+    <ul>
+      <li>Source: the league's public pages on page.spordle.com: score sheets (goals, assists, penalties, lineups), the Lions schedule and roster, the Junior C standings and suspensions. Updated {{UPDATED}}.</li>
+      <li>Game 7075 (16 Nov vs Pierrefonds): Giacomo Mazzuca is credited with the second assist on the Lions' first goal (Arcoraci, 6:45 of the 1st). The league's online sheet lists only Struffolino; the assist was added at the team's request, so Mazzuca's totals here are one assist higher than the league's.</li>
+      <li>Game 7087 (22 Nov at West-Island): Jonathan Tomarelli's match penalty and major for physical abuse of an official count 5 minutes each, as the league's standings do. Bench staff penalties are left out of the player tables.</li>
+      <li>League tab: scoring leaders and penalty minutes were tallied from the league's online score sheets for {{SHEETS}} of the {{PLAYED}} games played, with games played taken from each sheet's lineup.{{MISSING}} Penalty minutes count a minor as 2, a major as 5 and a misconduct as 10; team totals land within a few minutes of the standings. Team per-game figures come from the standings.</li>
+      <li>Goals for and against and the Lions' penalty minutes are checked against the league's standings.</li>
+      <li>Power-play and shorthanded goals are estimated: a goal counts as a power-play goal when the other team had more players in the box at that moment, with every minor taken as 2:00 and ended early by a power-play goal. Matching minors don't count as power-play chances.</li>
+      <li>Some players wore different numbers in the first game (Sciotto #1, Oustimenko #20, Choueiri #38); stats are matched by name and shown with roster numbers.</li>
+      <li>Dylan Lussier (listed "JA", an affiliated player) dressed once, on Oct 24.</li>
+      <li>Game 7010 lists the same head-contact minor twice for Noah Tyler Florio and Francis Daoust at 14:16 of the 3rd. The league counts both, so this page does too.</li>
+      <li>Game 7001 credits a goal to Braves du Nord goalie Konstantinos Nikolopoulos; that is how the sheet reads.</li>
+      <li>The official PDF game sheets for the first six games were downloaded alongside this data.</li>
+    </ul>
+  </details>
+</div>
+
+<script>
+window.LL = {
+  num: (v) => (v === null || v === undefined || v === '' ? NaN : +v),
+  ok: (id) => { const d = dash.data(id); return d.status === 'ok' ? d.data : null; },
+  team: () => { const d = LL.ok('team'); return d && d.length ? d[0] : null; },
+  short: (s) => (s || '').replace('VAUDREUIL-DORION', 'V-D').replace('PATRIOTES BEAUHARNOIS / STE-MARTINE', 'PATRIOTES B/SM').replace('PHÉNIX JSH MONTRÉAL-CENTRE', 'PHÉNIX JSH'),
+  title: (s) => (s || '').toLowerCase().replace(/(^|[\s\-\/'.])(\p{L})/gu, (m, a, b) => a + b.toUpperCase()),
+  fmtDate: d3.utcFormat('%b %-d'),
+  fmtDay: d3.utcFormat('%a %b %-d, %Y'),
+  parseDate: d3.utcParse('%Y-%m-%d'),
+  setText: (el, v) => { el.textContent = (v === null || v === undefined || v === '' || (typeof v === 'number' && isNaN(v))) ? '—' : v; },
+  ordinal: (n) => { const s = ['th', 'st', 'nd', 'rd'], v = n % 100; return n + (s[(v - 20) % 10] || s[v] || s[0]); },
+  tip: (box) => { let t = box.querySelector('.ll-tip'); if (!t) { t = document.createElement('div'); t.className = 'll-tip'; t.hidden = true; box.appendChild(t); } return t; },
+  showTip: (box, tip, lines, x, y) => {
+    tip.replaceChildren(...lines.map((ln, i) => { const d = document.createElement('div'); if (i === 0) { const b = document.createElement('b'); b.textContent = ln; d.appendChild(b); } else { const s = document.createElement('span'); s.textContent = ln; d.appendChild(s); } return d; }));
+    tip.hidden = false;
+    const bw = box.clientWidth, tw = tip.offsetWidth;
+    tip.style.left = Math.max(0, Math.min(bw - tw, x - tw / 2)) + 'px';
+    tip.style.top = Math.max(0, y - tip.offsetHeight - 10) + 'px';
+  }
+};
+</script>
+
+<script>
+// Takeaway + KPI tiles
+const kv = (name, fn) => dash.draw(name, (el) => { const t = LL.team(); LL.setText(el, t ? fn(t) : null); });
+kv('t-gp', (t) => t.gp);
+kv('t-w', (t) => t.w);
+kv('t-l', (t) => t.l);
+kv('t-gf', (t) => t.gf);
+kv('t-ga', (t) => t.ga);
+dash.draw('t-rank', (el) => { const s = LL.ok('standings'); const r = s && s.find((x) => x.team === 'LIONS LASALLE'); LL.setText(el, r ? LL.ordinal(+r.rank) : null); });
+dash.draw('t-next', (el) => {
+  const s = LL.ok('schedule'); if (!s) { LL.setText(el, null); return; }
+  const n = s.filter((r) => !r.result).sort((a, b) => d3.ascending(a.date, b.date))[0];
+  LL.setText(el, n ? `${LL.fmtDay(LL.parseDate(n.date))}, ${n.time.replace(':', 'h')}, ${n.home_away === 'Home' ? 'vs' : 'at'} ${LL.title(n.opponent)}` : 'none scheduled');
+});
+kv('k-w', (t) => t.w);
+kv('k-l', (t) => t.l);
+kv('k-hw', (t) => t.home_w);
+kv('k-hl', (t) => t.home_l);
+kv('k-aw', (t) => t.away_w);
+kv('k-al', (t) => t.away_l);
+kv('k-gfpg', (t) => (+t.gf_pg).toFixed(2));
+kv('k-gf', (t) => t.gf);
+kv('k-gapg', (t) => (+t.ga_pg).toFixed(2));
+kv('k-ga', (t) => t.ga);
+kv('k-pp', (t) => (+t.pp_pct).toFixed(0));
+kv('k-ppg', (t) => t.pp_goals);
+kv('k-ppo', (t) => t.pp_opps);
+kv('k-pk', (t) => (+t.pk_pct).toFixed(0));
+kv('k-pkk', (t) => t.pk_kills);
+kv('k-pkt', (t) => t.pk_times);
+kv('k-pimpg', (t) => (+t.pim_pg).toFixed(1));
+kv('k-pim', (t) => t.pim);
+kv('k-opim', (t) => t.opp_pim);
+dash.draw('sw-a', (el) => { el.style.background = 'var(--ll-red)'; });
+</script>
+
+<script>
+// Grouped bar chart helper
+window.LL.bars = (el, rows, opts) => {
+  const box = el; const W = Math.max(280, box.clientWidth || 600); const H = opts.height || 260;
+  const m = { top: 22, right: 8, bottom: opts.bottom || 40, left: 28 };
+  d3.select(box).selectAll('svg').remove();
+  const svg = d3.select(box).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img').attr('aria-label', opts.label);
+  const x = d3.scaleBand().domain(rows.map(opts.key)).range([m.left, W - m.right]).padding(0.28);
+  const x2 = d3.scaleBand().domain(['a', 'b']).range([0, x.bandwidth()]).padding(0.08);
+  const max = d3.max(rows, (r) => Math.max(opts.a(r), opts.b(r))) || 1;
+  const y = d3.scaleLinear().domain([0, max]).nice().range([H - m.bottom, m.top]);
+  svg.append('g').selectAll('line').data(y.ticks(4)).join('line').attr('x1', m.left).attr('x2', W - m.right).attr('y1', (d) => y(d)).attr('y2', (d) => y(d)).style('stroke', 'var(--cds-chart-grid)');
+  svg.append('g').selectAll('text').data(y.ticks(4)).join('text').attr('x', m.left - 6).attr('y', (d) => y(d)).attr('dy', '0.32em').attr('text-anchor', 'end').text((d) => d);
+  const tip = LL.tip(box);
+  const g = svg.append('g').selectAll('g').data(rows).join('g').attr('transform', (r) => `translate(${x(opts.key(r))},0)`);
+  [['a', opts.a, 'var(--ll-red)'], ['b', opts.b, 'var(--cds-chart-muted)']].forEach(([k, f, c]) => {
+    g.append('rect').attr('x', x2(k)).attr('width', x2.bandwidth()).attr('y', (r) => y(f(r))).attr('height', (r) => Math.max(0, y(0) - y(f(r)))).attr('rx', 2).style('fill', c);
+    g.append('text').attr('class', 'll-val').attr('x', x2(k) + x2.bandwidth() / 2).attr('y', (r) => y(f(r)) - 5).attr('text-anchor', 'middle').text((r) => f(r));
+  });
+  g.append('rect').attr('x', 0).attr('y', m.top).attr('width', x.bandwidth()).attr('height', H - m.top - m.bottom).style('fill', 'transparent')
+    .on('pointerenter pointermove', (ev, r) => { const [px, py] = d3.pointer(ev, box); LL.showTip(box, tip, opts.tip(r), px, py); })
+    .on('pointerleave', () => { tip.hidden = true; });
+  svg.append('line').attr('x1', m.left).attr('x2', W - m.right).attr('y1', y(0)).attr('y2', y(0)).style('stroke', 'var(--cds-chart-axis)');
+  opts.ticks(svg, rows, x, H - m.bottom);
+};
+
+dash.draw('games-chart', (el) => {
+  const rows = LL.ok('gamelog');
+  if (!rows) { d3.select(el).selectAll('svg').remove(); if (dash.data('gamelog').status === 'error') el.textContent = 'Failed to load'; return; }
+  const narrow = el.clientWidth < 520;
+  LL.bars(el, rows, {
+    key: (r) => r.game_no, a: (r) => +r.lions, b: (r) => +r.opp, height: 270, bottom: narrow ? 46 : 52,
+    label: 'Lions goals and opponent goals in each game played',
+    tip: (r) => [`${LL.fmtDate(LL.parseDate(r.date))} · ${r.home_away === 'Home' ? 'vs' : 'at'} ${LL.title(r.opponent)}`, `${r.result === 'W' ? 'Win' : 'Loss'} ${r.lions}–${r.opp} · goalie ${r.goalie}`, `By period ${r.lions_p1}-${r.lions_p2}-${r.lions_p3} vs ${r.opp_p1}-${r.opp_p2}-${r.opp_p3}`],
+    ticks: (svg, rows, x, base) => {
+      const t = svg.append('g').selectAll('g').data(rows).join('g').attr('transform', (r) => `translate(${x(r.game_no) + x.bandwidth() / 2},${base})`);
+      t.append('text').attr('y', 15).attr('text-anchor', 'middle').text((r) => LL.fmtDate(LL.parseDate(r.date)));
+      t.append('text').attr('y', 29).attr('text-anchor', 'middle').text((r) => narrow ? '' : (r.home_away === 'Home' ? 'vs ' : '@ ') + LL.short(r.opponent).split(' ')[0]);
+      t.append('text').attr('y', narrow ? 31 : 44).attr('text-anchor', 'middle').attr('class', (r) => r.result === 'W' ? 'll-wl-w' : 'll-wl-l').text((r) => r.result);
+    }
+  });
+});
+
+dash.draw('period-chart', (el) => {
+  const rows = LL.ok('periods');
+  if (!rows) { d3.select(el).selectAll('svg').remove(); return; }
+  LL.bars(el, rows, {
+    key: (r) => r.period, a: (r) => +r.lions_gf, b: (r) => +r.lions_ga, height: 240, bottom: 26,
+    label: 'Lions goals for and against by period',
+    tip: (r) => [`${r.period} period`, `Scored ${r.lions_gf} · allowed ${r.lions_ga}`],
+    ticks: (svg, rows, x, base) => { svg.append('g').selectAll('text').data(rows).join('text').attr('x', (r) => x(r.period) + x.bandwidth() / 2).attr('y', base + 16).attr('text-anchor', 'middle').text((r) => r.period); }
+  });
+});
+
+dash.draw('pen-chart', (el) => {
+  const rows = LL.ok('pens');
+  d3.select(el).selectAll('svg').remove();
+  if (!rows) return;
+  const W = Math.max(280, el.clientWidth || 500), rowH = 22, m = { top: 4, right: 28, bottom: 4 };
+  const H = m.top + m.bottom + rows.length * rowH;
+  const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img').attr('aria-label', 'Count of Lions minor penalties by infraction');
+  const labels = svg.append('g').selectAll('text').data(rows).join('text').attr('y', (r, i) => m.top + i * rowH + rowH / 2).attr('dy', '0.32em').text((r) => r.infraction);
+  let lw = 0; labels.each(function () { lw = Math.max(lw, this.getComputedTextLength()); });
+  const left = Math.ceil(lw) + 10;
+  labels.attr('x', left - 8).attr('text-anchor', 'end');
+  const x = d3.scaleLinear().domain([0, d3.max(rows, (r) => +r.lions_minors) || 1]).range([left, W - m.right]);
+  const tip = LL.tip(el);
+  svg.append('g').selectAll('rect').data(rows).join('rect').attr('x', left).attr('y', (r, i) => m.top + i * rowH + 4).attr('height', rowH - 8).attr('width', (r) => x(+r.lions_minors) - left).attr('rx', 2).style('fill', 'var(--ll-red)')
+    .on('pointerenter pointermove', (ev, r) => { const [px, py] = d3.pointer(ev, el); LL.showTip(el, tip, [r.infraction, `${r.infraction_fr} · ${r.lions_minors} minors (${r.lions_minors * 2} PIM)`], px, py); })
+    .on('pointerleave', () => { tip.hidden = true; });
+  svg.append('g').selectAll('text').data(rows).join('text').attr('class', 'll-val').attr('x', (r) => x(+r.lions_minors) + 5).attr('y', (r, i) => m.top + i * rowH + rowH / 2).attr('dy', '0.32em').text((r) => r.lions_minors);
+});
+</script>
+
+<script>
+// Tables
+const fillRows = (tb, rows, cells, key, cls) => {
+  d3.select(tb).selectAll('tr').data(rows, key).join('tr').attr('data-key', key).attr('class', cls || null)
+    .selectAll('td').data((r) => cells.map((c) => [c, r])).join('td')
+    .attr('class', ([c]) => c.l ? 'l' : null)
+    .each(function ([c, r]) { const v = c.f(r); if (v instanceof Node) this.replaceChildren(v); else this.textContent = v; });
+};
+const pill = (res) => { const s = document.createElement('span'); s.className = 'll-pill ' + (res === 'W' ? 'll-pill-w' : 'll-pill-l'); s.textContent = res; return s; };
+
+dash.draw('players', (tb) => {
+  const rows = LL.ok('players'); if (!rows) { tb.replaceChildren(); return; }
+  fillRows(tb, rows, [
+    { f: (r) => r.num }, { f: (r) => r.name, l: true }, { f: (r) => r.pos === '(affiliate)' ? 'JA' : r.pos }, { f: (r) => r.gp }, { f: (r) => r.g }, { f: (r) => r.a },
+    { f: (r) => r.pts }, { f: (r) => (+r.ppgp).toFixed(2) }, { f: (r) => r.ppg }, { f: (r) => r.shg }, { f: (r) => r.gwg }, { f: (r) => r.pim }, { f: (r) => (+r.share).toFixed(0) + '%' }
+  ], (r) => r.name);
+});
+dash.draw('goalies', (tb) => {
+  const rows = LL.ok('goalies'); if (!rows) { tb.replaceChildren(); return; }
+  fillRows(tb, rows, [
+    { f: (r) => r.num }, { f: (r) => r.name, l: true }, { f: (r) => r.dressed }, { f: (r) => r.gp }, { f: (r) => r.w }, { f: (r) => r.l }, { f: (r) => r.ga }, { f: (r) => (+r.gaa).toFixed(2) }, { f: (r) => r.so }
+  ], (r) => r.name);
+});
+dash.draw('log', (tb) => {
+  const rows = LL.ok('gamelog'); if (!rows) { tb.replaceChildren(); return; }
+  fillRows(tb, rows, [
+    { f: (r) => LL.fmtDate(LL.parseDate(r.date)), l: true }, { f: (r) => r.game_no, l: true }, { f: (r) => (r.home_away === 'Home' ? 'vs ' : 'at ') + LL.title(r.opponent), l: true },
+    { f: (r) => pill(r.result) }, { f: (r) => `${r.lions}–${r.opp}` }, { f: (r) => r.goalie, l: true }, { f: (r) => r.lions_pim }, { f: (r) => r.lions_scorers ? LL.title(r.lions_scorers) : '—', l: true }
+  ], (r) => r.game_no);
+});
+dash.draw('sched', (tb) => {
+  const rows = LL.ok('schedule'); if (!rows) { tb.replaceChildren(); return; }
+  const st = LL.ok('standings') || [];
+  const rec = (team) => { const s = st.find((x) => x.team === team); return s ? `${s.w}–${s.t}–${s.l} (${LL.ordinal(+s.rank)})` : '—'; };
+  const up = rows.filter((r) => !r.result).sort((a, b) => d3.ascending(a.date, b.date));
+  fillRows(tb, up, [
+    { f: (r) => LL.fmtDay(LL.parseDate(r.date)), l: true }, { f: (r) => r.time.replace(':', 'h'), l: true }, { f: (r) => r.home_away, l: true },
+    { f: (r) => LL.title(r.opponent), l: true }, { f: (r) => rec(r.opponent), l: true }, { f: (r) => r.arena, l: true }
+  ], (r) => r.game_no);
+});
+dash.draw('standings', (tb) => {
+  const rows = LL.ok('standings'); if (!rows) { tb.replaceChildren(); return; }
+  fillRows(tb, rows, [
+    { f: (r) => r.rank }, { f: (r) => LL.title(r.team), l: true }, { f: (r) => r.gp }, { f: (r) => r.w }, { f: (r) => r.t }, { f: (r) => r.l }, { f: (r) => r.fair_play_pts },
+    { f: (r) => r.pts }, { f: (r) => r.pts_pct }, { f: (r) => r.gf }, { f: (r) => r.ga }, { f: (r) => (+r.diff > 0 ? '+' : '') + r.diff }, { f: (r) => r.pim }
+  ], (r) => r.team, (r) => r.team === 'LIONS LASALLE' ? 'll-us' : null);
+});
+</script>
+
+<script>
+// League tab
+const fillRows = (tb, rows, cells, key, cls) => {
+  d3.select(tb).selectAll('tr').data(rows, key).join('tr').attr('data-key', key).attr('class', cls || null)
+    .selectAll('td').data((r) => cells.map((c) => [c, r])).join('td')
+    .attr('class', ([c]) => c.l ? 'l' : null)
+    .each(function ([c, r]) { const v = c.f(r); if (v instanceof Node) this.replaceChildren(v); else this.textContent = v; });
+};
+dash.calc('team_rates', {
+  inputs: ['standings'],
+  title: 'Team stats per game',
+  description: 'League rank and points from the standings, plus goals for, goals against, goal difference and penalty minutes divided by games played.',
+  fn: (standings) => standings.map((s) => {
+    const gp = +s.gp;
+    const r2 = (v) => Math.round(v * 100) / 100;
+    return { rank: +s.rank, team: s.team, gp, pts: +s.pts, pts_pct: s.pts_pct, gf_pg: r2(+s.gf / gp), ga_pg: r2(+s.ga / gp), diff_pg: r2((+s.gf - +s.ga) / gp), pim_pg: r2(+s.pim / gp) };
+  })
+});
+dash.calc('lions_best', {
+  inputs: ['league_players'],
+  title: 'Lions top scorer in the league',
+  description: 'The Lions player with the most points, and where that total ranks among all Junior C players (ties share a rank).',
+  fn: (league_players) => {
+    const us = league_players.filter((p) => p.team === 'LIONS LASALLE').sort((a, b) => (+b.pts - +a.pts) || (+b.g - +a.g));
+    if (!us.length) return [];
+    const best = us[0];
+    const rank = 1 + league_players.filter((p) => +p.pts > +best.pts).length;
+    return [{ name: best.name, pts: +best.pts, rank }];
+  }
+});
+
+window.LLlg = { team: '', sort: 'pts' };
+dash.draw('lg-top-name', (el) => { const P = LL.ok('league_players'); LL.setText(el, P && P[0] ? P[0].name : null); });
+dash.draw('lg-top-team', (el) => { const P = LL.ok('league_players'); LL.setText(el, P && P[0] ? LL.title(P[0].team) : null); });
+dash.draw('lg-top-pts', (el) => { const P = LL.ok('league_players'); LL.setText(el, P && P[0] ? P[0].pts : null); });
+dash.draw('lg-us-name', (el) => { const B = LL.ok('lions_best'); LL.setText(el, B && B[0] ? B[0].name : null); });
+dash.draw('lg-us-pts', (el) => { const B = LL.ok('lions_best'); LL.setText(el, B && B[0] ? B[0].pts : null); });
+dash.draw('lg-us-rank', (el) => { const B = LL.ok('lions_best'); LL.setText(el, B && B[0] ? B[0].rank : null); });
+
+dash.draw('lg-team', (sel) => {
+  const P = LL.ok('league_players') || [];
+  const teams = [...new Set(P.map((p) => p.team))].sort((a, b) => d3.ascending(LL.title(a), LL.title(b)));
+  sel.replaceChildren(new Option('All teams', ''), ...teams.map((t) => new Option(LL.title(t), t)));
+  sel.value = window.LLlg.team;
+  sel.onchange = () => { window.LLlg.team = sel.value; dash.draw('lg-players'); };
+});
+dash.draw('lg-players', (tb) => {
+  const P = LL.ok('league_players'); if (!P) { tb.replaceChildren(); return; }
+  const k = window.LLlg.sort, tie = k === 'pts' ? 'g' : 'pts';
+  const all = P.filter((p) => k !== 'ppgp' || +p.gp >= 3).sort((a, b) => (+b[k] - +a[k]) || (+b[tie] - +a[tie]) || d3.ascending(a.name, b.name));
+  const rankOf = new Map(); all.forEach((p) => { rankOf.set(p.player_id, 1 + all.filter((q) => +q[k] > +p[k]).length); });
+  const rows = window.LLlg.team ? all.filter((p) => p.team === window.LLlg.team) : all.slice(0, 25);
+  fillRows(tb, rows, [
+    { f: (r) => rankOf.get(r.player_id) }, { f: (r) => r.num || '' }, { f: (r) => r.name, l: true }, { f: (r) => LL.title(r.team), l: true },
+    { f: (r) => r.gp }, { f: (r) => r.g }, { f: (r) => r.a }, { f: (r) => r.pts }, { f: (r) => (+r.ppgp).toFixed(2) }, { f: (r) => r.pim }
+  ], (r) => r.player_id, (r) => r.team === 'LIONS LASALLE' ? 'll-us' : null);
+});
+document.querySelectorAll('#lg-sort').forEach((sel) => sel.addEventListener('change', () => { window.LLlg.sort = sel.value; dash.draw('lg-players'); }));
+
+dash.draw('rates', (tb) => {
+  const R = LL.ok('team_rates'); if (!R) { tb.replaceChildren(); return; }
+  const f2 = d3.format('.2f');
+  fillRows(tb, R.slice().sort((a, b) => a.rank - b.rank), [
+    { f: (r) => r.rank }, { f: (r) => LL.title(r.team), l: true }, { f: (r) => r.gp }, { f: (r) => r.pts }, { f: (r) => r.pts_pct }, { f: (r) => f2(r.gf_pg) }, { f: (r) => f2(r.ga_pg) },
+    { f: (r) => (r.diff_pg > 0 ? '+' : '') + f2(r.diff_pg) }, { f: (r) => f2(r.pim_pg) }
+  ], (r) => r.team, (r) => r.team === 'LIONS LASALLE' ? 'll-us' : null);
+});
+
+dash.draw('ad-chart', (el) => {
+  d3.select(el).selectAll('svg').remove();
+  const R = LL.ok('team_rates'); if (!R || !R.length) return;
+  const W = Math.max(280, el.clientWidth || 500), H = 300, m = { top: 12, right: 14, bottom: 34, left: 40 };
+  const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img').attr('aria-label', 'Scatter of goals scored per game against goals allowed per game for each Junior C team, Lions highlighted');
+  const x = d3.scaleLinear().domain(d3.extent(R, (r) => r.gf_pg)).nice().range([m.left, W - m.right]);
+  const y = d3.scaleLinear().domain(d3.extent(R, (r) => r.ga_pg)).nice().range([H - m.bottom, m.top]);
+  svg.append('g').selectAll('line').data(y.ticks(5)).join('line').attr('x1', m.left).attr('x2', W - m.right).attr('y1', (d) => y(d)).attr('y2', (d) => y(d)).style('stroke', 'var(--cds-chart-grid)');
+  svg.append('g').selectAll('text').data(y.ticks(5)).join('text').attr('x', m.left - 6).attr('y', (d) => y(d)).attr('dy', '0.32em').attr('text-anchor', 'end').text((d) => d);
+  svg.append('g').selectAll('text').data(x.ticks(W < 420 ? 4 : 6)).join('text').attr('x', (d) => x(d)).attr('y', H - m.bottom + 16).attr('text-anchor', 'middle').text((d) => d);
+  svg.append('text').attr('x', W - m.right).attr('y', H - 4).attr('text-anchor', 'end').text('Goals for per game →');
+  const ax = d3.mean(R, (r) => r.gf_pg), ay = d3.mean(R, (r) => r.ga_pg);
+  svg.append('line').attr('class', 'll-avg').attr('x1', x(ax)).attr('x2', x(ax)).attr('y1', m.top).attr('y2', H - m.bottom);
+  svg.append('line').attr('class', 'll-avg').attr('x1', m.left).attr('x2', W - m.right).attr('y1', y(ay)).attr('y2', y(ay));
+  const tip = LL.tip(el);
+  const others = R.filter((r) => r.team !== 'LIONS LASALLE'), us = R.filter((r) => r.team === 'LIONS LASALLE');
+  const dot = (sel, fill, rad) => sel.join('circle').attr('class', 'll-dot').attr('cx', (r) => x(r.gf_pg)).attr('cy', (r) => y(r.ga_pg)).attr('r', rad).style('fill', fill)
+    .on('pointerenter pointermove', (ev, r) => { const [px, py] = d3.pointer(ev, el); LL.showTip(el, tip, [LL.title(r.team), `${r.gf_pg.toFixed(2)} scored · ${r.ga_pg.toFixed(2)} allowed per game`, `${r.gp} games · ${r.pts_pct} points %`], px, py); })
+    .on('pointerleave', () => { tip.hidden = true; });
+  dot(svg.append('g').selectAll('circle').data(others), 'var(--cds-chart-muted)', 6);
+  dot(svg.append('g').selectAll('circle').data(us), 'var(--ll-red)', 8);
+  us.forEach((r) => {
+    const lx = x(r.gf_pg), right = lx < W - 70;
+    svg.append('text').attr('class', 'll-lab-us').attr('x', lx + (right ? 11 : -11)).attr('y', y(r.ga_pg)).attr('dy', '0.32em').attr('text-anchor', right ? 'start' : 'end').text('Lions');
+  });
+  svg.append('text').attr('x', m.left + 4).attr('y', m.top + 2).attr('dy', '0.7em').text('↑ Goals against per game');
+});
+
+dash.draw('pim-chart', (el) => {
+  d3.select(el).selectAll('svg').remove();
+  const R = LL.ok('team_rates'); if (!R || !R.length) return;
+  const rows = R.slice().sort((a, b) => b.pim_pg - a.pim_pg);
+  const W = Math.max(280, el.clientWidth || 500), rowH = 18, m = { top: 4, right: 36, bottom: 4 };
+  const H = m.top + m.bottom + rows.length * rowH;
+  const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img').attr('aria-label', 'Penalty minutes per game for each Junior C team, Lions highlighted');
+  const labels = svg.append('g').selectAll('text').data(rows).join('text').attr('y', (r, i) => m.top + i * rowH + rowH / 2).attr('dy', '0.32em').attr('class', (r) => r.team === 'LIONS LASALLE' ? 'll-lab-us' : null).text((r) => LL.title(LL.short(r.team)));
+  let lw = 0; labels.each(function () { lw = Math.max(lw, this.getComputedTextLength()); });
+  const left = Math.ceil(lw) + 10;
+  labels.attr('x', left - 8).attr('text-anchor', 'end');
+  const x = d3.scaleLinear().domain([0, d3.max(rows, (r) => r.pim_pg) || 1]).range([left, W - m.right]);
+  const avg = d3.mean(rows, (r) => r.pim_pg);
+  const tip = LL.tip(el);
+  svg.append('g').selectAll('rect').data(rows).join('rect').attr('x', left).attr('y', (r, i) => m.top + i * rowH + 3).attr('height', rowH - 6).attr('width', (r) => Math.max(0, x(r.pim_pg) - left)).attr('rx', 2)
+    .style('fill', (r) => r.team === 'LIONS LASALLE' ? 'var(--ll-red)' : 'var(--cds-chart-muted)')
+    .on('pointerenter pointermove', (ev, r) => { const [px, py] = d3.pointer(ev, el); LL.showTip(el, tip, [LL.title(r.team), `${r.pim_pg.toFixed(2)} penalty minutes per game`, `League average ${avg.toFixed(2)}`], px, py); })
+    .on('pointerleave', () => { tip.hidden = true; });
+  svg.append('g').selectAll('text').data(rows).join('text').attr('class', 'll-val').attr('x', (r) => x(r.pim_pg) + 5).attr('y', (r, i) => m.top + i * rowH + rowH / 2).attr('dy', '0.32em').text((r) => r.pim_pg.toFixed(1));
+  svg.append('line').attr('class', 'll-avg').attr('x1', x(avg)).attr('x2', x(avg)).attr('y1', m.top).attr('y2', H - m.bottom);
+});
+
+dash.draw('sus', (tb) => {
+  const S = LL.ok('suspensions'); if (!S) { tb.replaceChildren(); return; }
+  fillRows(tb, S, [
+    { f: (r) => r.player, l: true }, { f: (r) => LL.title(r.team), l: true }, { f: (r) => r.code, l: true }, { f: (r) => '#' + r.game_no, l: true }, { f: (r) => r.served }, { f: (r) => r.games }
+  ], (r) => r.player);
+});
+</script>
+
+<script>
+// Site navigation: one page section visible at a time
+(function () {
+  const pages = () => [...document.querySelectorAll('.ll-page')];
+  const show = (id, link) => {
+    const ps = pages(); if (!ps.length) return;
+    if (!ps.some((p) => p.id === id)) id = ps[0].id;
+    ps.forEach((p) => { p.hidden = p.id !== id; });
+    document.querySelectorAll('.ll-tab').forEach((b) => b.setAttribute('aria-current', b.dataset.tab === id ? 'page' : 'false'));
+    if (link) dash.setLink(id);
+  };
+  document.querySelectorAll('[data-tab]').forEach((b) => b.addEventListener('click', () => {
+    show(b.dataset.tab, true);
+    const nav = document.querySelector('.ll-nav'); if (nav && nav.getBoundingClientRect().top < 0) nav.scrollIntoView({ block: 'start' });
+  }));
+  show((location.hash || '').slice(1) || 'home', false);
+  document.querySelectorAll('#roster-sort').forEach((sel) => sel.addEventListener('change', () => { window.LLsort = sel.value; dash.draw('roster-cards'); }));
+})();
+</script>
+
+<script>
+// Roster: player cards, goalie cards, game-by-game grid, staff, home top scorers
+window.LL.enc = (s) => encodeURIComponent(s);
+window.LL.games = () => {
+  const pg = LL.ok('pgames'); if (!pg) return [];
+  const m = new Map(); pg.forEach((r) => { if (!m.has(r.game_no)) m.set(r.game_no, r); });
+  return [...m.values()].sort((a, b) => d3.ascending(a.date, b.date));
+};
+window.LL.el = (tag, cls, text, attrs) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined && text !== null) e.textContent = text; if (attrs) Object.entries(attrs).forEach(([k, v]) => e.setAttribute(k, v)); return e; };
+window.LL.posName = { F: 'Forward', D: 'Defence', JA: 'Affiliated player', '(affiliate)': 'Affiliated player', G: 'Goalie' };
+window.LL.numKey = (n) => (/^\d+$/.test(n) ? +n : 999);
+window.LL.heat = (pts) => pts > 0 ? `color-mix(in srgb, ${'var(--ll-red)'} ${Math.min(70, 18 + pts * 18)}%, transparent)` : 'transparent';
+
+dash.draw('roster-cards', (box) => {
+  const P = LL.ok('players'), PG = LL.ok('pgames');
+  if (!P || !PG) { box.replaceChildren(); if (dash.data('players').status === 'error' || dash.data('pgames').status === 'error') box.textContent = 'Failed to load'; return; }
+  const games = LL.games();
+  const sort = window.LLsort || 'num';
+  const rows = P.slice().sort((a, b) =>
+    sort === 'name' ? d3.ascending(a.name, b.name) :
+    sort === 'num' ? d3.ascending(LL.numKey(a.num), LL.numKey(b.num)) :
+    d3.descending(+a[sort], +b[sort]) || d3.descending(+a.pts, +b.pts) || d3.ascending(a.name, b.name));
+  box.replaceChildren(...rows.map((r) => {
+    const where = 'name=' + LL.enc(r.name);
+    const card = LL.el('article', 'll-card', null, { id: 'p-' + r.name.toLowerCase().replace(/[^a-z]+/g, '-') });
+    const top = LL.el('div', 'll-card-top');
+    top.append(LL.el('span', 'll-card-num', r.num === 'JA' || !r.num ? '—' : r.num));
+    const who = LL.el('div'); who.append(LL.el('div', 'll-card-name', r.name), LL.el('div', 'll-card-pos', LL.posName[r.pos] || r.pos));
+    top.append(who); card.append(top);
+    const stats = LL.el('div', 'll-card-stats');
+    [['gp', 'GP'], ['g', 'G'], ['a', 'A'], ['pts', 'PTS'], ['pim', 'PIM']].forEach(([f, k]) => {
+      const c = LL.el('div'); c.append(LL.el('div', 'll-stat-v', r[f], { 'data-source': 'players', 'data-field': f, 'data-where': where }), LL.el('div', 'll-stat-k', k)); stats.append(c);
+    });
+    card.append(stats);
+    const strip = LL.el('div', 'll-strip', null, { role: 'list', 'aria-label': r.name + ' game by game' });
+    games.forEach((gm) => {
+      const pg = PG.find((x) => x.name === r.name && x.game_no === gm.game_no);
+      const dressed = pg && pg.dressed === '1';
+      const cell = LL.el('div', 'll-cell' + (dressed ? '' : ' ll-cell-dnp'), null, { role: 'listitem' });
+      cell.append(LL.el('span', 'll-cell-d', LL.fmtDate(LL.parseDate(gm.date))));
+      if (dressed) {
+        cell.style.background = LL.heat(+pg.pts);
+        const w = 'name=' + LL.enc(r.name) + '&game_no=' + gm.game_no;
+        cell.append(LL.el('span', 'll-cell-v', pg.pts, { 'data-source': 'pgames', 'data-field': 'pts', 'data-where': w }));
+        cell.append(LL.el('span', 'll-cell-x', pg.g + 'G ' + pg.a + 'A'));
+      } else {
+        cell.append(LL.el('span', 'll-cell-v', '–'), LL.el('span', 'll-cell-x', 'DNP'));
+      }
+      strip.append(cell);
+    });
+    card.append(strip);
+    return card;
+  }));
+});
+
+dash.draw('goalie-cards', (box) => {
+  const G = LL.ok('goalies'), PG = LL.ok('pgames');
+  if (!G || !PG) { box.replaceChildren(); return; }
+  const games = LL.games();
+  box.replaceChildren(...G.slice().sort((a, b) => d3.ascending(LL.numKey(a.num), LL.numKey(b.num))).map((r) => {
+    const where = 'name=' + LL.enc(r.name);
+    const card = LL.el('article', 'll-card');
+    const top = LL.el('div', 'll-card-top');
+    top.append(LL.el('span', 'll-card-num', r.num));
+    const who = LL.el('div'); who.append(LL.el('div', 'll-card-name', r.name), LL.el('div', 'll-card-pos', 'Goalie')); top.append(who); card.append(top);
+    const stats = LL.el('div', 'll-card-stats');
+    [['gp', 'DEC', (v) => v], ['w', 'W', (v) => v], ['l', 'L', (v) => v], ['ga', 'GA', (v) => v], ['gaa', 'GA/G', (v) => (+v).toFixed(2)]].forEach(([f, k, fmt]) => {
+      const c = LL.el('div'); c.append(LL.el('div', 'll-stat-v', fmt(r[f]), { 'data-source': 'goalies', 'data-field': f, 'data-where': where }), LL.el('div', 'll-stat-k', k)); stats.append(c);
+    });
+    card.append(stats);
+    const strip = LL.el('div', 'll-strip', null, { role: 'list', 'aria-label': r.name + ' game by game' });
+    games.forEach((gm) => {
+      const pg = PG.find((x) => x.name === r.name && x.game_no === gm.game_no);
+      const dressed = pg && pg.dressed === '1';
+      const cell = LL.el('div', 'll-cell' + (dressed ? '' : ' ll-cell-dnp'), null, { role: 'listitem' });
+      cell.append(LL.el('span', 'll-cell-d', LL.fmtDate(LL.parseDate(gm.date))));
+      if (dressed && pg.goalie_result) {
+        cell.append(LL.el('span', 'll-cell-v ' + (pg.goalie_result === 'W' ? 'll-good' : 'll-bad'), pg.goalie_result));
+        cell.append(LL.el('span', 'll-cell-x', pg.goalie_ga + ' GA'));
+      } else {
+        cell.append(LL.el('span', 'll-cell-v', '–'), LL.el('span', 'll-cell-x', dressed ? 'Backup' : 'DNP'));
+      }
+      strip.append(cell);
+    });
+    card.append(strip);
+    return card;
+  }));
+});
+
+dash.draw('matrix', (box) => {
+  const P = LL.ok('players'), PG = LL.ok('pgames');
+  if (!P || !PG) { box.replaceChildren(); return; }
+  const games = LL.games();
+  const t = LL.el('table', 'll-table', null, { 'aria-label': 'Goals and assists for each player in each game' });
+  const hr = LL.el('tr');
+  hr.append(LL.el('th', 'l', 'Player'));
+  games.forEach((gm) => { const th = LL.el('th', 'c'); th.append(LL.el('div', null, LL.fmtDate(LL.parseDate(gm.date))), LL.el('div', null, gm.ha + ' ' + LL.title(LL.short(gm.opponent).split(' ')[0]))); hr.append(th); });
+  ['G', 'A', 'PTS'].forEach((k) => hr.append(LL.el('th', null, k)));
+  const thead = LL.el('thead'); thead.append(hr); t.append(thead);
+  const tb = LL.el('tbody');
+  P.slice().sort((a, b) => d3.descending(+a.pts, +b.pts) || d3.descending(+a.g, +b.g) || d3.ascending(a.name, b.name)).forEach((r) => {
+    const tr = LL.el('tr');
+    tr.append(LL.el('td', 'l', (r.num && r.num !== 'JA' ? '#' + r.num + ' ' : '') + r.name));
+    games.forEach((gm) => {
+      const pg = PG.find((x) => x.name === r.name && x.game_no === gm.game_no);
+      if (!pg || pg.dressed !== '1') { tr.append(LL.el('td', 'c z', '—')); return; }
+      if (+pg.pts === 0) { tr.append(LL.el('td', 'c z', '·')); return; }
+      const td = LL.el('td', 'c', pg.g + '–' + pg.a); td.style.background = LL.heat(+pg.pts); tr.append(td);
+    });
+    const w = 'name=' + LL.enc(r.name);
+    ['g', 'a', 'pts'].forEach((f) => tr.append(LL.el('td', null, r[f], { 'data-source': 'players', 'data-field': f, 'data-where': w })));
+    tb.append(tr);
+  });
+  t.append(tb);
+  box.replaceChildren(t);
+});
+
+dash.draw('staff', (ul) => {
+  const R = LL.ok('roster'); if (!R) { ul.replaceChildren(); return; }
+  ul.replaceChildren(...R.filter((r) => /coach/i.test(r.position)).sort((a, b) => d3.ascending(a.position !== 'Head coach', b.position !== 'Head coach')).map((r) => {
+    const li = LL.el('li'); li.append(LL.el('b', null, LL.title(r.name)), LL.el('span', null, r.position)); return li;
+  }));
+});
+
+dash.draw('top5', (ol) => {
+  const P = LL.ok('players'); if (!P) { ol.replaceChildren(); return; }
+  ol.replaceChildren(...P.slice().sort((a, b) => d3.descending(+a.pts, +b.pts) || d3.descending(+a.g, +b.g)).slice(0, 5).map((r) => {
+    const w = 'name=' + LL.enc(r.name);
+    const li = LL.el('li');
+    li.append(LL.el('span', 'n', r.num === 'JA' ? '' : '#' + r.num), LL.el('span', 'nm', r.name));
+    const v = LL.el('span', 'v'); v.append(LL.el('span', null, r.g, { 'data-source': 'players', 'data-field': 'g', 'data-where': w }), document.createTextNode(' G · '), LL.el('span', null, r.a, { 'data-source': 'players', 'data-field': 'a', 'data-where': w }), document.createTextNode(' A'));
+    const p = LL.el('span', 'p'); p.append(LL.el('span', null, r.pts, { 'data-source': 'players', 'data-field': 'pts', 'data-where': w }), document.createTextNode(' pts'));
+    li.append(v, p); return li;
+  }));
+});
+</script>

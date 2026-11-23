@@ -1,0 +1,25 @@
+game_no,spordle_id,date,time,home_away,opponent,arena,lions_score,opp_score,result
+7001,940066,2026-10-13,21:00,Away,BRAVES DU NORD,Aréna Ahuntsic (Glace 1) - Montréal,0,7,L
+7010,940083,2026-10-17,,Home,MUSTANGS 1 VAUDREUIL-DORION,Aréna Jacques-Lemaire (Glace 1) - LaSalle,7,6,W
+7018,940082,2026-10-19,,Home,SPARTANS ST-LAURENT,Aréna Jacques-Lemaire (Glace 1) - LaSalle,5,1,W
+7030,940289,2026-10-24,,Away,MUSTANGS 2 VAUDREUIL-DORION,Aréna Vaudreuil-Dorion (Glace Vaudreuil) - Vaudreuil-Dorion,4,2,W
+7045,940274,2026-11-01,,Away,COUGARS ST-LEONARD,Aréna Martin-Brodeur (Glace 1) - Saint-Léonard,2,5,L
+7049,940270,2026-11-02,,Home,PATRIOTES BEAUHARNOIS / STE-MARTINE,Aréna Jacques-Lemaire (Glace 1) - LaSalle,2,4,L
+7075,940244,2026-11-16,19:00,Home,BARONS PIERREFONDS,Aréna Jacques-Lemaire (Glace 1) - LaSalle,9,2,W
+7087,940231,2026-11-22,19:30,Away,ROYALS WEST-ISLAND,Arena Edgar Rouleau (Glace 1) - Dorval,1,6,L
+7091,940227,2026-11-23,20:30,Away,ETOILES EST MONTREAL,Aréna Rodrigue-Gilbert (Michel Plasse) - Montréal,,,
+7103,940216,2026-11-30,19:00,Home,CHEVALIERS HMRPP,Aréna Jacques-Lemaire (Glace 1) - LaSalle,,,
+7113,940207,2026-12-05,21:30,Away,DEVILS M.R.O.,Aréna de Mont-Royal (ville) (Glace 1) - Mont-Royal,,,
+7130,940189,2026-12-14,19:00,Home,DEVILS M.R.O.,Aréna Jacques-Lemaire (Glace 1) - LaSalle,,,
+7144,940176,2026-12-20,21:00,Away,PHÉNIX JSH MONTRÉAL-CENTRE,Aréna Camilien-Houde (Glace 1) - Montréal,,,
+7158,940161,2027-01-10,21:15,Away,BARONS PIERREFONDS,Sportplexe Pierrefonds (Glace 2) - Pierrefonds,,,
+7160,940159,2027-01-11,19:00,Home,CIVICS DDO,Aréna Jacques-Lemaire (Glace 1) - LaSalle,,,
+7165,940153,2027-01-15,21:45,Away,MUSTANGS 1 VAUDREUIL-DORION,Aréna Vaudreuil-Dorion (Glace Dorion) - Vaudreuil-Dorion,,,
+7166,940155,2027-01-16,18:00,Home,BRAVES DU NORD,Aréna Jacques-Lemaire (Glace 1) - LaSalle,,,
+7172,940147,2027-01-18,21:00,Away,BRAVES VALLEYFIELD,Centre Sportif et Culturel de Saint-Timothée (Glace 1) - Salaberry-de-Valleyfield,,,
+7183,940135,2027-01-25,19:00,Home,TIGERS LMHF,Aréna Jacques-Lemaire (Glace 1) - LaSalle,,,
+7191,940128,2027-01-30,19:30,Home,PHÉNIX JSH MONTRÉAL-CENTRE,Aréna Jacques-Lemaire (Glace 1) - LaSalle,,,
+7206,940113,2027-02-07,20:30,Away,ÉLITES EST MONTRÉAL,Aréna Clément-Jetté (Glace 1) - Montréal,,,
+7209,940111,2027-02-08,19:00,Home,PANTHERS N.D.G.,Aréna Jacques-Lemaire (Glace 1) - LaSalle,,,
+7221,940098,2027-02-21,21:00,Away,HAWKS HRS,Complexe Sportif Saint-Lazare (Glace 1) - Saint-Lazare,,,
+7222,940097,2027-02-22,19:00,Home,ROYALS WEST-ISLAND,Aréna Jacques-Lemaire (Glace 1) - LaSalle,,,

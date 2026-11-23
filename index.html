@@ -220,7 +220,7 @@ body { font-family: var(--font-anthropic-sans); -webkit-font-smoothing: antialia
     <h2>Every game so far</h2>
     <div class="ll-legend"><span class="ll-key"><span class="ll-sw ll-sw-a" data-draw="sw-a"></span>Lions goals</span><span class="ll-key"><span class="ll-sw ll-sw-b"></span>Opponent goals</span></div>
     <div class="ll-chart" id="games-chart" data-draw="games-chart" data-source="gamelog"></div>
-    <p class="ll-note">The three wins came in a row (Oct 17 to 24). The 0–7 opener at Braves du Nord accounts for most of the goal deficit; since then the Lions are 20–18.</p>
+    <p class="ll-note">Each pair of bars is one game: Lions goals in red, opponent goals in tan, with the result underneath.</p>
   </section>
 
   <section class="ll-sec" id="leaders-mini">
@@ -270,12 +270,12 @@ body { font-family: var(--font-anthropic-sans); -webkit-font-smoothing: antialia
       <h2>Goals by period</h2>
       <div class="ll-legend"><span class="ll-key"><span class="ll-sw ll-sw-a" data-draw="sw-a"></span>For</span><span class="ll-key"><span class="ll-sw ll-sw-b"></span>Against</span></div>
       <div class="ll-chart" id="period-chart" data-draw="period-chart" data-source="periods"></div>
-      <p class="ll-note">The 2nd period is where games get away: 15 goals allowed, the most of any period.</p>
+      <p class="ll-note">Goals for and against in each period, all games combined.</p>
     </section>
     <section class="ll-sec" id="pen-types">
       <h2>Lions minor penalties by type</h2>
       <div class="ll-chart" id="pen-chart" data-draw="pen-chart" data-source="pens"></div>
-      <p class="ll-note">Head contact and body checking make up 14 of the Lions' 38 minors.</p>
+      <p class="ll-note">Minor penalties only; majors, match penalties and misconducts aren't included.</p>
     </section>
   </div>
 
@@ -339,7 +339,7 @@ body { font-family: var(--font-anthropic-sans); -webkit-font-smoothing: antialia
         <tbody data-draw="standings"></tbody>
       </table>
     </div>
-    <p class="ll-note">FP is the league's fair-play point, earned per game. The table is ordered by points, and teams have played different numbers of games (the Lions 8, some teams 11 to 13), so points percentage is the fairer comparison.</p>
+    <p class="ll-note">FP is the league's fair-play point, earned per game. The table is ordered by points, and teams have played different numbers of games, so points percentage is the fairer comparison.</p>
   </section>
 
   </section>
@@ -384,7 +384,7 @@ body { font-family: var(--font-anthropic-sans); -webkit-font-smoothing: antialia
         <tbody data-draw="lg-players"></tbody>
       </table>
     </div>
-    <p class="ll-note">All teams shows the top 25; pick a team to see its whole list. Lions players are shaded. Tallied from 85 of the 87 games played: game 7050 (Phénix vs Chevaliers, 2 Nov) has no score sheet posted, and one Tigers–Mustangs 1 game wasn't found. GP counts the games a player is listed in the lineup on the score sheet. P/GP is points per game played; sorting by it lists players with 3 or more games.</p>
+    <p class="ll-note">All teams shows the top 25; pick a team to see its whole list. Lions players are shaded. Tallied from 85 of the 87 games played. Not yet included (no score sheet posted): game 7050 (Phénix vs Chevaliers, 2 Nov). Games still missing a posted sheet are added automatically once the league posts them. GP counts the games a player is listed in the lineup on the score sheet. P/GP is points per game played; sorting by it lists players with 3 or more games.</p>
   </section>
 
   <section class="ll-sec" id="suspensions">
@@ -395,18 +395,18 @@ body { font-family: var(--font-anthropic-sans); -webkit-font-smoothing: antialia
         <tbody data-draw="sus"></tbody>
       </table>
     </div>
-    <p class="ll-note">As listed on the league's Suspensions page on 23 November 2026. Jonathan Tomarelli is suspended 5 games after his match penalty against Royals West-Island on 22 Nov. Team staff are marked.</p>
+    <p class="ll-note">As listed on the league's Suspensions page on 23 November 2026. Team staff are marked.</p>
   </section>
   </section>
 
   <details id="notes">
     <summary>How these stats were made</summary>
     <ul>
-      <li>Source: the league's public pages on page.spordle.com, read on 11, 18 and 23 November 2026: the eight Lions score sheets (goals, assists, penalties, lineups), the team schedule and the roster. The Junior C standings were refreshed on 23 November 2026.</li>
+      <li>Source: the league's public pages on page.spordle.com: score sheets (goals, assists, penalties, lineups), the Lions schedule and roster, the Junior C standings and suspensions. Updated 23 November 2026.</li>
       <li>Game 7075 (16 Nov vs Pierrefonds): Giacomo Mazzuca is credited with the second assist on the Lions' first goal (Arcoraci, 6:45 of the 1st). The league's online sheet lists only Struffolino; the assist was added at the team's request, so Mazzuca's totals here are one assist higher than the league's.</li>
       <li>Game 7087 (22 Nov at West-Island): Jonathan Tomarelli's match penalty and major for physical abuse of an official count 5 minutes each, as the league's standings do. Bench staff penalties are left out of the player tables.</li>
-      <li>League tab: scoring leaders and penalty minutes were tallied from the league's online score sheets for 85 of the 87 games played through 22 November 2026, with games played taken from each sheet's lineup. Penalty minutes count a minor as 2, a major as 5 and a misconduct as 10; team totals land within a few minutes of the standings. Team per-game figures come from the standings.</li>
-      <li>Goals for and against, and the Lions' 86 penalty minutes, match the league's standings exactly.</li>
+      <li>League tab: scoring leaders and penalty minutes were tallied from the league's online score sheets for 85 of the 87 games played, with games played taken from each sheet's lineup. Not yet included (no score sheet posted): game 7050 (Phénix vs Chevaliers, 2 Nov). Games still missing a posted sheet are added automatically once the league posts them. Penalty minutes count a minor as 2, a major as 5 and a misconduct as 10; team totals land within a few minutes of the standings. Team per-game figures come from the standings.</li>
+      <li>Goals for and against and the Lions' penalty minutes are checked against the league's standings.</li>
       <li>Power-play and shorthanded goals are estimated: a goal counts as a power-play goal when the other team had more players in the box at that moment, with every minor taken as 2:00 and ended early by a power-play goal. Matching minors don't count as power-play chances.</li>
       <li>Some players wore different numbers in the first game (Sciotto #1, Oustimenko #20, Choueiri #38); stats are matched by name and shown with roster numbers.</li>
       <li>Dylan Lussier (listed "JA", an affiliated player) dressed once, on Oct 24.</li>

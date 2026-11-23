@@ -1,0 +1,9 @@
+game_no,date,home_away,opponent,lions,opp,result,goalie,lions_p1,lions_p2,lions_p3,opp_p1,opp_p2,opp_p3,lions_pim,opp_pim,lions_scorers
+7001,2026-10-13,Away,BRAVES DU NORD,0,7,L,Anthony Danesi,0,0,0,4,1,2,6,4,
+7010,2026-10-17,Home,MUSTANGS 1 VAUDREUIL-DORION,7,6,W,Luca Falbo,1,3,3,1,3,2,12,10,Quinn Somers; Lucas Neill; Damiano Di Perna; Giuliano Arcoraci; Antony Oustimenko; Giacomo Mazzuca; Jonathan Tomarelli
+7018,2026-10-19,Home,SPARTANS ST-LAURENT,5,1,W,Anthony Danesi,0,1,4,0,1,0,4,4,Noah Tyler Florio; Giuliano Arcoraci; Lucas Neill; Raphael Gravel; Domenico Struffolino
+7030,2026-10-24,Away,MUSTANGS 2 VAUDREUIL-DORION,4,2,W,Luca Falbo,2,2,0,0,2,0,12,10,Massimo Di Santo; Giuliano Arcoraci; Mathieu Cousineau; Santino Sciotto
+7045,2026-11-01,Away,COUGARS ST-LEONARD,2,5,L,Anthony Danesi,0,1,1,2,2,1,16,8,Noah Tyler Florio; Antony Oustimenko
+7049,2026-11-02,Home,PATRIOTES BEAUHARNOIS / STE-MARTINE,2,4,L,Luca Falbo,1,1,0,1,1,2,6,10,Mathieu Cousineau; Giuliano Arcoraci
+7075,2026-11-16,Home,BARONS PIERREFONDS,9,2,W,Anthony Danesi,3,5,1,1,1,0,8,10,Giuliano Arcoraci; Reno Cariglia; Jonathan Tomarelli; Santino Sciotto; Marco Falbo; Damiano Di Perna
+7087,2026-11-22,Away,ROYALS WEST-ISLAND,1,6,L,Luca Falbo,1,0,0,2,4,0,22,18,Jonathan Tomarelli

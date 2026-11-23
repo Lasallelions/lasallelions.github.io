@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lions LaSalle 2026-27</title>
+<meta name="description" content="Lions LaSalle Junior C stats, results, schedule, standings and league leaders, 2026-27 season.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --font-anthropic-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-anthropic-serif: 'Source Serif 4', Georgia, serif;
+  --cds-font-size-caption: 12px; --cds-font-size-body: 14px; --cds-font-size-heading: 18px; --cds-font-size-title: 32px;
+  --cds-font-weight-medium: 600;
+  --cds-gap-xs: 4px; --cds-gap-sm: 8px; --cds-gap-md: 12px; --cds-gap-lg: 16px; --cds-gap-xl: 28px;
+  --cds-pad-xs: 4px; --cds-pad-sm: 8px; --cds-pad-md: 12px; --cds-pad-lg: 16px; --cds-pad-xl: 24px;
+  --cds-radius: 10px; --cds-dur-slow: 300ms; --cds-ease-out: cubic-bezier(.2,.8,.2,1);
+  color-scheme: light;
+}
+[hidden] { display: none !important; }
+html, body { margin: 0; background: #fcf8ee; color: #111; }
+body { font-family: var(--font-anthropic-sans); -webkit-font-smoothing: antialiased; }
+#dash-root { max-width: 1180px; margin: 0 auto; }
+.dash-select { font: inherit; font-size: 13px; padding: 4px 26px 4px 8px; border: 1px solid #d9cdb2; border-radius: 6px; background-color: #fff; color: #111;
+  appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23555'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 8px center; }
+.site-foot { max-width: 1180px; margin: 0 auto; padding: 8px 24px 32px; font-size: 12px; color: #555; }
+@media (max-width: 600px) { :root { --cds-font-size-title: 26px; } }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>window.__LL_DATA__ = {{DATA}};</script>
+<script>
+(function(){
+  const RAW = window.__LL_DATA__;
+  const store = {};
+  for (const k in RAW) { const rows = d3.csvParse(RAW[k]); store[k] = rows; }
+  const calcs = {}; const calcCache = {};
+  const draws = {};
+  const hiddenUp = (el) => { for (let e = el; e && e !== document.body; e = e.parentElement) if (e.hidden) return true; return false; };
+  const dash = {
+    colors: ['var(--ll-red)', '#6f6552', '#b9ad96', '#1b7a36', '#9a6700'],
+    data(id) {
+      if (store[id]) { const r = { status: 'ok', data: store[id], message: null, refreshing: false, meta: {} }; r.columns = store[id].columns; return r; }
+      if (calcs[id]) {
+        if (!(id in calcCache)) { const c = calcs[id]; calcCache[id] = c.fn(...c.inputs.map((i) => (store[i] || dash.data(i).data || []))); }
+        return { status: 'ok', data: calcCache[id], message: null, refreshing: false, meta: {} };
+      }
+      return { status: 'missing', data: [], message: 'No such source', refreshing: false, meta: {} };
+    },
+    calc(id, def) { calcs[id] = def; },
+    loader() {},
+    onData(fn) { try { fn(); } catch (e) { console.error(e); } },
+    draw(name, fn) {
+      if (typeof fn === 'function') { draws[name] = fn; return; }
+      dash.__run(name);
+    },
+    __run(name, scope) {
+      const fn = draws[name]; if (!fn) return;
+      (scope || document).querySelectorAll('[data-draw="' + name + '"]').forEach((el) => { if (hiddenUp(el)) return; try { fn(el); } catch (e) { console.error(name, e); } });
+    },
+    __runAll(scope) { Object.keys(draws).forEach((n) => dash.__run(n, scope)); },
+    setLink(id) { try { history.replaceState(null, '', '#' + id); } catch (e) {} },
+    params() { return {}; }, setParams() {}, resetParams() {}, refresh() {}
+  };
+  window.dash = dash;
+  document.addEventListener('DOMContentLoaded', () => {
+    dash.__runAll();
+    new MutationObserver((ms) => { ms.forEach((m) => { if (m.target.hidden === false) dash.__runAll(m.target); }); })
+      .observe(document.getElementById('dash-root'), { attributes: true, attributeFilter: ['hidden'], subtree: true });
+    let w = window.innerWidth, t;
+    window.addEventListener('resize', () => { clearTimeout(t); t = setTimeout(() => { if (window.innerWidth !== w) { w = window.innerWidth; dash.__runAll(); } }, 150); });
+  });
+})();
+</script>
+</head>
+<body>
+<div id="dash-root" lang="en">
+{{PAGE}}
+</div>
+<p class="site-foot">Stats from the Ligue de hockey du Grand Montréal's public score sheets on Spordle. Updated {{UPDATED}}.</p>
+</body>
+</html>
