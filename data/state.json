@@ -85,6 +85,8 @@
   7087,
   7089,
   7090,
+  7091,
+  7092,
   7226
  ],
  "lions_processed": [
@@ -95,11 +97,16 @@
   7045,
   7049,
   7075,
-  7087
+  7087,
+  7091
  ],
  "id_index": {
   "940269": {
-   "no": 7050
+   "no": 7050,
+   "date": "2026-11-02",
+   "teams": [],
+   "final": false,
+   "cat": "Junior CM"
   },
   "940231": {
    "no": 7087
@@ -108,28 +115,66 @@
    "no": 7075
   },
   "940227": {
-   "no": 7091
+   "no": 7091,
+   "date": "2026-11-23",
+   "teams": [
+    "LIONS LASALLE",
+    "ETOILES EST MONTREAL"
+   ],
+   "final": true,
+   "cat": "Junior CM"
   },
   "940228": {
-   "no": 7092
+   "no": 7092,
+   "date": "2026-11-23",
+   "teams": [
+    "HAWKS HRS",
+    "CHEVALIERS HMRPP"
+   ],
+   "final": true,
+   "cat": "Junior CM"
   },
   "940226": {
-   "no": 7093
+   "no": 7093,
+   "date": "",
+   "teams": [],
+   "final": false,
+   "cat": "Junior CM"
   },
   "940225": {
-   "no": 7094
+   "no": 7094,
+   "date": "2026-12-15",
+   "teams": [],
+   "final": false,
+   "cat": "Junior CM"
   },
   "940224": {
-   "no": 7095
+   "no": 7095,
+   "date": "2026-11-24",
+   "teams": [],
+   "final": false,
+   "cat": "Junior CM"
   },
   "940223": {
-   "no": 7096
+   "no": 7096,
+   "date": "2026-11-24",
+   "teams": [],
+   "final": false,
+   "cat": "Junior CM"
   },
   "940222": {
-   "no": 7098
+   "no": 7098,
+   "date": "2026-11-28",
+   "teams": [],
+   "final": false,
+   "cat": "Junior CM"
   },
   "940233": {
-   "no": 7088
+   "no": 7088,
+   "date": "",
+   "teams": [],
+   "final": false,
+   "cat": "Junior CM"
   },
   "940230": {
    "no": 7089
@@ -174,47 +219,217 @@
    "no": 7226
   },
   "940091": {
-   "no": 7228
+   "no": 7228,
+   "date": "2026-12-20",
+   "teams": [],
+   "final": false,
+   "cat": "Junior CM"
   },
   "940092": {
-   "no": 7227
+   "no": 7227,
+   "date": "2026-12-08",
+   "teams": [],
+   "final": false,
+   "cat": "Junior CM"
   },
   "940093": {
-   "no": 7225
+   "no": 7225,
+   "date": "2027-02-27",
+   "teams": [],
+   "final": false,
+   "cat": "Junior CM"
   },
   "940094": {
-   "no": 7224
+   "no": 7224,
+   "date": "2027-02-23",
+   "teams": [],
+   "final": false,
+   "cat": "Junior CM"
   },
   "940096": {
-   "no": 7223
+   "no": 7223,
+   "date": "2027-02-22",
+   "teams": [],
+   "final": false,
+   "cat": "Junior CM"
+  },
+  "940097": {
+   "no": 7222,
+   "date": "2027-02-22",
+   "teams": [],
+   "final": false,
+   "cat": "Junior CM"
+  },
+  "940098": {
+   "no": 7221,
+   "date": "2027-02-21",
+   "teams": [],
+   "final": false,
+   "cat": "Junior CM"
+  },
+  "940099": {
+   "no": 7220,
+   "date": "2027-02-20",
+   "teams": [],
+   "final": false,
+   "cat": "Junior CM"
+  },
+  "940100": {
+   "no": 7216,
+   "date": "2027-02-15",
+   "teams": [],
+   "final": false,
+   "cat": "Junior CM"
+  },
+  "940101": {
+   "no": 7214,
+   "date": "2027-02-13",
+   "teams": [],
+   "final": false,
+   "cat": "Junior CM"
+  },
+  "940102": {
+   "no": 7217,
+   "date": "2027-02-16",
+   "teams": [],
+   "final": false,
+   "cat": "Junior CM"
+  },
+  "940103": {
+   "no": 7215,
+   "date": "2027-02-13",
+   "teams": [],
+   "final": false,
+   "cat": "Junior CM"
+  },
+  "940104": {
+   "no": 7218,
+   "date": "2027-02-17",
+   "teams": [],
+   "final": false,
+   "cat": "Junior CM"
+  },
+  "940105": {
+   "no": 7213,
+   "date": "2027-02-12",
+   "teams": [],
+   "final": false,
+   "cat": "Junior CM"
+  },
+  "940106": {
+   "no": 7219,
+   "date": "2027-02-20",
+   "teams": [],
+   "final": false,
+   "cat": "Junior CM"
+  },
+  "940107": {
+   "no": 7212,
+   "date": "2027-02-10",
+   "teams": [],
+   "final": false,
+   "cat": "Junior CM"
+  },
+  "940108": {
+   "no": 7211,
+   "date": "2027-02-09",
+   "teams": [],
+   "final": false,
+   "cat": "Junior CM"
+  },
+  "940109": {
+   "no": 7208,
+   "date": "2027-02-07",
+   "teams": [],
+   "final": false,
+   "cat": "Junior CM"
+  },
+  "940110": {
+   "no": 7210,
+   "date": "2027-02-09",
+   "teams": [],
+   "final": false,
+   "cat": "Junior CM"
+  },
+  "940111": {
+   "no": 7209,
+   "date": "2027-02-08",
+   "teams": [],
+   "final": false,
+   "cat": "Junior CM"
+  },
+  "940112": {
+   "no": 7207,
+   "date": "2027-02-07",
+   "teams": [],
+   "final": false,
+   "cat": "Junior CM"
+  },
+  "940113": {
+   "no": 7206,
+   "date": "2027-02-07",
+   "teams": [],
+   "final": false,
+   "cat": "Junior CM"
+  },
+  "940114": {
+   "no": 7205,
+   "date": "2027-02-07",
+   "teams": [],
+   "final": false,
+   "cat": "Junior CM"
+  },
+  "940115": {
+   "no": 7204,
+   "date": "2027-02-06",
+   "teams": [],
+   "final": false,
+   "cat": "Junior CM"
+  },
+  "940116": {
+   "no": 7203,
+   "date": "2027-02-06",
+   "teams": [],
+   "final": false,
+   "cat": "Junior CM"
+  },
+  "940117": {
+   "no": 7202,
+   "date": "2027-02-04",
+   "teams": [],
+   "final": false,
+   "cat": "Junior CM"
+  },
+  "940118": {
+   "no": 7201,
+   "date": "2027-02-03",
+   "teams": [],
+   "final": false,
+   "cat": "Junior CM"
+  },
+  "940119": {
+   "no": 7199,
+   "date": "2027-02-02",
+   "teams": [],
+   "final": false,
+   "cat": "Junior CM"
+  },
+  "940120": {
+   "no": 7200,
+   "date": "2027-02-03",
+   "teams": [],
+   "final": false,
+   "cat": "Junior CM"
+  },
+  "940121": {
+   "no": 7198,
+   "date": "2027-02-01",
+   "teams": [],
+   "final": false,
+   "cat": "Junior CM"
   }
  },
  "unscanned_ids": [
-  940097,
-  940098,
-  940099,
-  940100,
-  940101,
-  940102,
-  940103,
-  940104,
-  940105,
-  940106,
-  940107,
-  940108,
-  940109,
-  940110,
-  940111,
-  940112,
-  940113,
-  940114,
-  940115,
-  940116,
-  940117,
-  940118,
-  940119,
-  940120,
-  940121,
   940122,
   940123,
   940124,
@@ -325,5 +540,5 @@
    "note": "Giacomo Mazzuca added as second assist on the Lions' first goal (Arcoraci 6:45 1st); already applied to data/ files. Do not re-apply."
   }
  ],
- "last_update": "2026-11-23"
+ "last_update": "2026-11-24"
 }
