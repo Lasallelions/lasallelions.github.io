@@ -538,6 +538,10 @@
   {
    "game_no": 7075,
    "note": "Giacomo Mazzuca added as second assist on the Lions' first goal (Arcoraci 6:45 1st); already applied to data/ files. Do not re-apply."
+  },
+  {
+   "game_no": 7091,
+   "note": "Per Claudio: goals at 1:43 (1st) and 1:10 (3rd) are Antony Oustimenko's (sheet: Choueiri, Florio); Choueiri takes Oustimenko's assist on Somers' 9:44 (1st) goal; Oustimenko's assist on Somers' 9:28 (3rd) goal removed. Already applied to data/ files. Do not re-apply."
   }
  ],
  "last_update": "2026-11-24"
