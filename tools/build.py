@@ -10,7 +10,8 @@ D = os.path.join(ROOT, 'data')
 DATASETS = {  # dashboard dataset id -> data file
     'gamelog': 'game_log.csv', 'goalies': 'goalie_stats.csv', 'periods': 'goals_by_period.csv', 'schedule': 'lions_schedule_2026-27.csv',
     'pens': 'penalty_types.csv', 'pgames': 'player_games.csv', 'players': 'player_stats.csv', 'team': 'team_summary.csv',
-    'roster': 'roster.csv', 'league_players': 'league_players.csv', 'standings': 'standings.csv', 'suspensions': 'suspensions.csv'}
+    'roster': 'roster.csv', 'league_players': 'league_players.csv', 'standings': 'standings.csv', 'suspensions': 'suspensions.csv',
+    'special': 'special_teams.csv'}
 MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
 
@@ -18,6 +19,7 @@ def main():
     ap = argparse.ArgumentParser(); ap.add_argument('--today', required=True); a = ap.parse_args()
     d = datetime.date.fromisoformat(a.today)
     updated = '%d %s %d' % (d.day, MONTHS[d.month - 1], d.year)
+    import sys; sys.path.insert(0, os.path.join(ROOT, 'tools')); import special; special.compute()
     state = json.load(open(os.path.join(D, 'state.json'), encoding='utf-8'))
     st = list(csv.DictReader(open(os.path.join(D, 'standings.csv'), encoding='utf-8')))
     played = sum(int(r['gp']) for r in st) // 2

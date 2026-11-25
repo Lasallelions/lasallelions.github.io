@@ -134,6 +134,15 @@ def main():
                                        'final': bool(g.get('final')), 'cat': g.get('cat', '')}
         if g['id'] in state['unscanned_ids']: state['unscanned_ids'].remove(g['id'])
 
+    # raw sheets (team-level special teams use these; player corrections live in the CSVs, not here)
+    gp_path = os.path.join(D, 'games.json')
+    raw = json.load(open(gp_path, encoding='utf-8')) if os.path.exists(gp_path) else {}
+    for g in games:
+        if g.get('final') and 'goals' in g and g.get('no') and int(g['no']) < 7500:
+            raw[str(int(g['no']))] = {'no': int(g['no']), 'date': iso(g.get('date')), 'teams': g['teams'], 'scores': g['scores'], 'final': True,
+                                      'goals': g['goals'], 'pens': g['pens']}
+    json.dump(raw, open(gp_path, 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))
+
     # 2. league player totals
     lp, lpf = rd('league_players.csv')
     lpi = {r['player_id']: r for r in lp}

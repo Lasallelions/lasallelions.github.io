@@ -102,6 +102,7 @@
     <button type="button" class="ll-tab" data-tab="schedule">Schedule</button>
     <button type="button" class="ll-tab" data-tab="standings">Standings</button>
     <button type="button" class="ll-tab" data-tab="league">League</button>
+    <button type="button" class="ll-tab" data-tab="special">Special Units</button>
   </nav>
 
   <section class="ll-page" id="home">
@@ -318,6 +319,39 @@
       </table>
     </div>
     <p class="ll-note">As listed on the league's Suspensions page on {{UPDATED}}. Team staff are marked.</p>
+  </section>
+  </section>
+
+  <section class="ll-page" id="special" hidden>
+  <p class="ll-take" id="special-take">The Lions' power play ranks <b data-draw="sp-pp-rank" data-source="lions_special" data-field="pp_rank" data-row="0">—</b> of <span data-draw="sp-n" data-source="lions_special" data-field="n" data-row="0">—</span> at <b data-draw="sp-pp" data-source="lions_special" data-field="pp_pct" data-row="0">—</b>%, and their penalty kill ranks <b data-draw="sp-pk-rank" data-source="lions_special" data-field="pk_rank" data-row="0">—</b> at <b data-draw="sp-pk" data-source="lions_special" data-field="pk_pct" data-row="0">—</b>%.</p>
+
+  <div class="ll-grid2">
+    <section class="ll-sec" id="pp-teams">
+      <h2>Power play %</h2>
+      <div class="ll-chart" id="pp-chart" data-draw="sp-pp-chart" data-source="special" style="min-height: 300px"></div>
+      <p class="ll-note">Power-play goals out of power-play chances. Dashed line: league average.</p>
+    </section>
+    <section class="ll-sec" id="pk-teams">
+      <h2>Penalty kill %</h2>
+      <div class="ll-chart" id="pk-chart" data-draw="sp-pk-chart" data-source="special" style="min-height: 300px"></div>
+      <p class="ll-note">Times shorthanded without allowing a power-play goal. Dashed line: league average.</p>
+    </section>
+  </div>
+
+  <section class="ll-sec" id="special-table-sec">
+    <div class="ll-row">
+      <h2>Special units ranking</h2>
+      <div class="ll-ctrls">
+        <label class="ll-sort">Rank by <select class="dash-select" id="sp-sort" aria-label="Rank by"><option value="special_index">Combined (PP% + PK%)</option><option value="pp_pct">Power play %</option><option value="pk_pct">Penalty kill %</option></select></label>
+      </div>
+    </div>
+    <div class="ll-scroll">
+      <table class="ll-table" id="special-table" data-source="special" data-row-key="team">
+        <thead><tr><th>#</th><th class="l" data-field="team">Team</th><th data-field="gp">GP</th><th data-field="pp_goals">PPG</th><th data-field="pp_opps">PP opp</th><th data-field="pp_pct">PP%</th><th data-field="pp_rank">PP rank</th><th data-field="ppga">PPGA</th><th data-field="times_sh">Times SH</th><th data-field="pk_pct">PK%</th><th data-field="pk_rank">PK rank</th><th data-field="shg">SHG</th><th data-field="shga">SHGA</th></tr></thead>
+        <tbody data-draw="sp-rows"></tbody>
+      </table>
+    </div>
+    <p class="ll-note">Worked out from the times of every goal and penalty on the league's score sheets, since the league doesn't publish power-play stats. Each minor, double minor, major or match penalty not cancelled by a same-time penalty to the other team counts as a power-play chance, and a goal scored while the other team has more players in the box counts as a power-play goal. Penalty-shot goals aren't counted either way. These are close estimates, not official numbers, and they can differ slightly from the Lions' own figures on the Stats tab.</p>
   </section>
   </section>
 
@@ -646,6 +680,67 @@ dash.draw('sus', (tb) => {
     { f: (r) => r.player, l: true }, { f: (r) => LL.title(r.team), l: true }, { f: (r) => r.code, l: true }, { f: (r) => '#' + r.game_no, l: true }, { f: (r) => r.served }, { f: (r) => r.games }
   ], (r) => r.player);
 });
+</script>
+
+<script>
+// Special units tab
+const spFill = (tb, rows, cells, key, cls) => {
+  d3.select(tb).selectAll('tr').data(rows, key).join('tr').attr('data-key', key).attr('class', cls || null)
+    .selectAll('td').data((r) => cells.map((c) => [c, r])).join('td')
+    .attr('class', ([c]) => c.l ? 'l' : null)
+    .each(function ([c, r]) { this.textContent = c.f(r); });
+};
+dash.calc('lions_special', {
+  inputs: ['special'],
+  title: 'Lions special units rank',
+  description: "The Lions' row of the special units table, with the number of teams ranked.",
+  fn: (special) => {
+    const us = special.find((r) => r.team === 'LIONS LASALLE');
+    return us ? [{ pp_rank: +us.pp_rank, pk_rank: +us.pk_rank, pp_pct: +us.pp_pct, pk_pct: +us.pk_pct, n: special.length }] : [];
+  }
+});
+dash.draw('sp-pp-rank', (el) => { const B = LL.ok('lions_special'); LL.setText(el, B && B[0] ? B[0].pp_rank : null); });
+dash.draw('sp-pk-rank', (el) => { const B = LL.ok('lions_special'); LL.setText(el, B && B[0] ? B[0].pk_rank : null); });
+dash.draw('sp-pp', (el) => { const B = LL.ok('lions_special'); LL.setText(el, B && B[0] ? B[0].pp_pct.toFixed(1) : null); });
+dash.draw('sp-pk', (el) => { const B = LL.ok('lions_special'); LL.setText(el, B && B[0] ? B[0].pk_pct.toFixed(1) : null); });
+dash.draw('sp-n', (el) => { const B = LL.ok('lions_special'); LL.setText(el, B && B[0] ? B[0].n : null); });
+window.LLsp = { sort: 'special_index' };
+document.querySelectorAll('#sp-sort').forEach((sel) => sel.addEventListener('change', () => { window.LLsp.sort = sel.value; dash.draw('sp-rows'); }));
+dash.draw('sp-rows', (tb) => {
+  const R = LL.ok('special'); if (!R) { tb.replaceChildren(); return; }
+  const k = window.LLsp.sort;
+  const rows = R.slice().sort((a, b) => (+b[k] - +a[k]) || d3.ascending(a.team, b.team));
+  const rank = (r) => 1 + rows.filter((o) => +o[k] > +r[k]).length;
+  const f1 = (v) => (+v).toFixed(1);
+  spFill(tb, rows, [
+    { f: rank }, { f: (r) => LL.title(r.team), l: true }, { f: (r) => r.gp }, { f: (r) => r.pp_goals }, { f: (r) => r.pp_opps },
+    { f: (r) => f1(r.pp_pct) }, { f: (r) => r.pp_rank }, { f: (r) => r.ppga }, { f: (r) => r.times_sh }, { f: (r) => f1(r.pk_pct) },
+    { f: (r) => r.pk_rank }, { f: (r) => r.shg }, { f: (r) => r.shga }
+  ], (r) => r.team, (r) => r.team === 'LIONS LASALLE' ? 'll-us' : null);
+});
+const spBars = (el, field, label) => {
+  d3.select(el).selectAll('svg').remove();
+  const R = LL.ok('special'); if (!R || !R.length) return;
+  const rows = R.slice().sort((a, b) => +b[field] - +a[field]);
+  const W = Math.max(280, el.clientWidth || 500), rowH = 18, m = { top: 4, right: 40, bottom: 4 };
+  const H = m.top + m.bottom + rows.length * rowH;
+  const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img').attr('aria-label', label + ' for each Junior C team, Lions highlighted');
+  const labels = svg.append('g').selectAll('text').data(rows).join('text').attr('y', (r, i) => m.top + i * rowH + rowH / 2).attr('dy', '0.32em').attr('class', (r) => r.team === 'LIONS LASALLE' ? 'll-lab-us' : null).text((r) => LL.title(LL.short(r.team)));
+  let lw = 0; labels.each(function () { lw = Math.max(lw, this.getComputedTextLength()); });
+  const left = Math.ceil(lw) + 10;
+  labels.attr('x', left - 8).attr('text-anchor', 'end');
+  const x = d3.scaleLinear().domain([0, d3.max(rows, (r) => +r[field]) || 1]).range([left, W - m.right]);
+  const avg = d3.mean(rows, (r) => +r[field]);
+  const tip = LL.tip(el);
+  svg.append('g').selectAll('rect').data(rows).join('rect').attr('x', left).attr('y', (r, i) => m.top + i * rowH + 3).attr('height', rowH - 6).attr('width', (r) => Math.max(0, x(+r[field]) - left)).attr('rx', 2)
+    .style('fill', (r) => r.team === 'LIONS LASALLE' ? 'var(--ll-red)' : 'var(--cds-chart-muted)')
+    .on('pointerenter pointermove', (ev, r) => { const [px, py] = d3.pointer(ev, el); LL.showTip(el, tip, [LL.title(r.team), field === 'pp_pct' ? `${(+r.pp_pct).toFixed(1)}% · ${r.pp_goals} goals on ${r.pp_opps} chances` : `${(+r.pk_pct).toFixed(1)}% · ${r.ppga} goals allowed on ${r.times_sh} times shorthanded`, `League average ${avg.toFixed(1)}%`], px, py); })
+    .on('pointerleave', () => { tip.hidden = true; });
+  svg.append('g').selectAll('text').data(rows).join('text').attr('class', 'll-val').attr('x', (r) => x(+r[field]) + 5).attr('y', (r, i) => m.top + i * rowH + rowH / 2).attr('dy', '0.32em').text((r) => (+r[field]).toFixed(1));
+  svg.append('line').attr('class', 'll-avg').attr('x1', x(avg)).attr('x2', x(avg)).attr('y1', m.top).attr('y2', H - m.bottom);
+};
+dash.draw('sp-pp-chart', (el) => spBars(el, 'pp_pct', 'Power play percentage'));
+dash.draw('sp-pk-chart', (el) => spBars(el, 'pk_pct', 'Penalty kill percentage'));
 </script>
 
 <script>
